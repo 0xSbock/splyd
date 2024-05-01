@@ -7,8 +7,7 @@ import { next as A } from '@automerge/automerge'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
 
-import App from './App.tsx'
-import './index.css'
+import App from './App'
 
 const repo = new Repo({
   network: [new BroadcastChannelNetworkAdapter()],
