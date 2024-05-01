@@ -1,5 +1,6 @@
 import { AutomergeUrl } from '@automerge/automerge-repo'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
+import { Button } from 'primereact/button';
 
 import TransactionDoc from './transactionDoc'
 
@@ -9,6 +10,7 @@ function App({ docUrl }: { docUrl: AutomergeUrl }) {
   return (
     <>
       <pre>{JSON.stringify(doc, null, 2)}</pre>
+      <Button>Test</Button>
     </>
   )
 }

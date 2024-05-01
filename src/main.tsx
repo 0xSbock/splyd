@@ -6,6 +6,11 @@ import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-index
 import { next as A } from '@automerge/automerge'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
+import { PrimeReactProvider } from 'primereact/api';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+
+
+
 import TransactionDoc from './transactionDoc'
 
 import App from './App'
@@ -34,7 +39,9 @@ window.doc = doc
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RepoContext.Provider value={repo}>
-      <App docUrl={docUrl} />
+      <PrimeReactProvider>
+        <App docUrl={docUrl} />
+      </PrimeReactProvider>
     </RepoContext.Provider>
   </React.StrictMode>,
 )
