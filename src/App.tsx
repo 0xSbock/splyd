@@ -1,16 +1,39 @@
-import { AutomergeUrl } from '@automerge/automerge-repo'
-import { useDocument } from '@automerge/automerge-repo-react-hooks'
-import { Button } from 'primereact/button';
+import { useState } from 'react'
 
-import TransactionDoc from './transactionDoc'
+import { MenuItem } from 'primereact/menuitem'
+import { Menubar } from 'primereact/menubar'
 
-function App({ docUrl }: { docUrl: AutomergeUrl }) {
-  const [doc, _changeDoc] = useDocument<TransactionDoc>(docUrl)
+const Home = (<h1>Home</h1>)
+const Users = (<h1>Users</h1>)
+const Transactions = (<h1>Transactions</h1>)
+
+function App() {
+  const [component, setComponent] = useState(Home);
+
+  const menuItems: MenuItem[] = [
+    {
+      label: 'Home',
+      icon: 'pi pi-home',
+      command: () => setComponent(Home),
+    },
+    {
+      label: 'Users',
+      icon: 'pi pi-users',
+      command: () => setComponent(Users),
+    },
+    {
+      label: 'Transactions',
+      icon: 'pi pi-calculator',
+      command: () => setComponent(Transactions),
+    },
+  ];
 
   return (
     <>
-      <pre>{JSON.stringify(doc, null, 2)}</pre>
-      <Button>Test</Button>
+      <div className="card">
+        <Menubar model={menuItems} />
+      </div>
+      {component}
     </>
   )
 }
