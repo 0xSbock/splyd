@@ -3,18 +3,18 @@ import { next as A } from '@automerge/automerge'
 // TODO: type for uuid?
 type Id = string
 
-type User = {
+export type User = {
   id: Id
   name: string
   createdAt: Date
 }
 
-type TransactionParticipant = {
+export type TransactionParticipant = {
   userId: Id
   share: A.Float64
 }
 
-type Transaction = {
+export type Transaction = {
   id: Id
   name: string
   descripttion?: string
