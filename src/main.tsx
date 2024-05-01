@@ -6,6 +6,7 @@ import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-index
 import { next as A } from '@automerge/automerge'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
+import TransactionDoc from './transactionDoc'
 
 import App from './App'
 
@@ -15,16 +16,20 @@ const repo = new Repo({
 })
 
 const rootDocUrl = `${document.location.hash.substring(1)}`
-let handle
+let doc
 if (isValidAutomergeUrl(rootDocUrl)) {
-  handle = repo.find(rootDocUrl)
+  doc = repo.find(rootDocUrl)
 } else {
-  handle = repo.create<{ counter?: A.Counter }>()
-  handle.change(d => (d.counter = new A.Counter()))
+  doc = repo.create<TransactionDoc>()
+  doc.change(d => {
+    d.version = new A.Uint(0)
+    d.users = []
+    d.transactions = []
+  })
 }
-const docUrl = (document.location.hash = handle.url)
+const docUrl = (document.location.hash = doc.url)
 // @ts-expect-error we'll use this later for experimentation
-window.handle = handle
+window.doc = doc
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

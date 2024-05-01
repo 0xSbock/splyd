@@ -1,13 +1,10 @@
 import { AutomergeUrl } from '@automerge/automerge-repo'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
-import { next as A } from '@automerge/automerge'
 
-interface CounterDoc {
-  counter: A.Counter
-}
+import TransactionDoc from './transactionDoc'
 
 function App({ docUrl }: { docUrl: AutomergeUrl }) {
-  const [doc, changeDoc] = useDocument<CounterDoc>(docUrl)
+  const [doc, _changeDoc] = useDocument<TransactionDoc>(docUrl)
 
   return (
     <>
