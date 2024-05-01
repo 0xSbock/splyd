@@ -12,6 +12,7 @@ import 'primeicons/primeicons.css';
 
 
 import TransactionDoc from './transactionDoc'
+import { DocUrlContext } from './context'
 
 import App from './App'
 
@@ -40,7 +41,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RepoContext.Provider value={repo}>
       <PrimeReactProvider>
-        <App docUrl={docUrl} />
+        <DocUrlContext.Provider value={docUrl}>
+          <App docUrl={docUrl} />
+        </DocUrlContext.Provider>
       </PrimeReactProvider>
     </RepoContext.Provider>
   </React.StrictMode>,
