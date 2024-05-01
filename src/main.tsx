@@ -8,7 +8,7 @@ import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
 import { PrimeReactProvider } from 'primereact/api';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
-
+import 'primeicons/primeicons.css';
 
 
 import TransactionDoc from './transactionDoc'
