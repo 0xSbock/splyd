@@ -2,9 +2,11 @@ import { useState } from 'react'
 
 import { MenuItem } from 'primereact/menuitem'
 import { Menubar } from 'primereact/menubar'
+import Users from './Users'
 
 const Home = (<h1>Home</h1>)
-const Users = (<h1>Users</h1>)
+// const Users = (<h1>Users</h1>)
+const UsersPreRendered = <Users />
 const Transactions = (<h1>Transactions</h1>)
 
 function App() {
@@ -19,7 +21,7 @@ function App() {
     {
       label: 'Users',
       icon: 'pi pi-users',
-      command: () => setComponent(Users),
+      command: () => setComponent(UsersPreRendered),
     },
     {
       label: 'Transactions',
