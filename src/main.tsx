@@ -41,7 +41,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <RepoContext.Provider value={repo}>
       <PrimeReactProvider>
         <DocUrlContext.Provider value={docUrl}>
-          <App docUrl={docUrl} />
+          <App />
         </DocUrlContext.Provider>
       </PrimeReactProvider>
     </RepoContext.Provider>
