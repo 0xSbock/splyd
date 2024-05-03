@@ -4,13 +4,13 @@ import { MenuItem } from 'primereact/menuitem'
 import { Menubar } from 'primereact/menubar'
 import Users from './Users'
 
-const Home = (<h1>Home</h1>)
+const Home = <h1>Home</h1>
 // const Users = (<h1>Users</h1>)
 const UsersPreRendered = <Users />
-const Transactions = (<h1>Transactions</h1>)
+const Transactions = <h1>Transactions</h1>
 
 function App() {
-  const [component, setComponent] = useState(Home);
+  const [component, setComponent] = useState(Home)
 
   const menuItems: MenuItem[] = [
     {
@@ -28,7 +28,7 @@ function App() {
       icon: 'pi pi-calculator',
       command: () => setComponent(Transactions),
     },
-  ];
+  ]
 
   return (
     <>

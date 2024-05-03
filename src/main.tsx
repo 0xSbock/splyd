@@ -6,10 +6,9 @@ import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-index
 import { next as A } from '@automerge/automerge'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
-import { PrimeReactProvider } from 'primereact/api';
-import "primereact/resources/themes/lara-light-cyan/theme.css";
-import 'primeicons/primeicons.css';
-
+import { PrimeReactProvider } from 'primereact/api'
+import 'primereact/resources/themes/lara-light-cyan/theme.css'
+import 'primeicons/primeicons.css'
 
 import TransactionDoc from './transactionDoc'
 import { DocUrlContext } from './context'
@@ -27,7 +26,7 @@ if (isValidAutomergeUrl(rootDocUrl)) {
   doc = repo.find(rootDocUrl)
 } else {
   doc = repo.create<TransactionDoc>()
-  doc.change(d => {
+  doc.change((d) => {
     d.version = new A.Uint(0)
     d.users = []
     d.transactions = []
@@ -46,5 +45,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </DocUrlContext.Provider>
       </PrimeReactProvider>
     </RepoContext.Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 )
