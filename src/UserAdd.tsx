@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 import { Card } from 'primereact/card'
 import { InputText } from 'primereact/inputtext'
