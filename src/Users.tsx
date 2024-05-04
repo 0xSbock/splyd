@@ -2,14 +2,14 @@ import { useState, useContext } from 'react'
 import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 import { Button } from 'primereact/button'
-import { InputText } from 'primereact/inputtext'
-import { FloatLabel } from 'primereact/floatlabel'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Dialog } from 'primereact/dialog'
 
 import TransactionDoc, { User } from './transactionDoc'
 import { DocUrlContext } from './context'
+
+import UserAdd from './UserAdd'
 
 const header = (
   <div className="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -22,18 +22,8 @@ const createdAt = (user: User) => user.createdAt.toDateString()
 const Users = () => {
   const docUrl = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
-  const [username, setUsername] = useState('')
   const [visibleEditDialog, setVisibleEditDialog] = useState(false)
 
-  const handleUsernameSubmit = () => {
-    const newUser: User = {
-      id: self.crypto.randomUUID(),
-      name: username,
-      createdAt: new Date(),
-    }
-    changeDoc((d) => d?.users.push(newUser))
-    setUsername('')
-  }
   const handleUserDelete = (id: string) => {
     const userIndex = doc?.users.findIndex((user: User) => user.id === id)
     if (userIndex === -1) {
@@ -82,17 +72,8 @@ const Users = () => {
           <Column header="Delete" body={DeleteUser} />
         </DataTable>
       </div>
-      <div className="card">
-        <FloatLabel>
-          <InputText
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <label htmlFor="username">Username</label>
-        </FloatLabel>
-        <Button onClick={() => handleUsernameSubmit()}>Add new User</Button>
-      </div>
+
+      <UserAdd />
     </>
   )
 }
