@@ -85,6 +85,7 @@ const UserList = () => {
         visible={toEditID !== undefined}
         style={{ width: '50vw' }}
         onHide={() => onDialogHide}
+        draggable={false}
       >
         <FloatLabel>
           <InputText
