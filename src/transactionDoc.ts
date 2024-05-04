@@ -11,16 +11,20 @@ export type User = {
 
 export type TransactionParticipant = {
   userId: Id
-  share: A.Float64
+  // FIXME: only same amount of value is allowed currently
+  share?: A.Float64
 }
 
 export type Transaction = {
-  id: Id
-  name: string
-  descripttion?: string
   amount: A.Float64
-  participants: TransactionParticipant[]
+  createdAt: Date
   currency: string
+  id: Id
+  participants: TransactionParticipant[]
+  paying: Id | undefined
+  title: string
+  date?: Date
+  description?: string
 }
 
 type TransactionDoc = {
