@@ -7,6 +7,7 @@ import { Button } from 'primereact/button'
 
 import TransactionDoc, { User } from './transactionDoc'
 import { DocUrlContext } from './context'
+import { usernameTaken } from './utils'
 
 const UserAdd = () => {
   const docUrl = useContext(DocUrlContext)
@@ -15,8 +16,7 @@ const UserAdd = () => {
 
   const handleUsernameSubmit = () => {
     // check if user with that name already exists
-    const existingUsernames = doc?.users.map((u) => u.name) || []
-    if (existingUsernames.findIndex((u) => u === username) !== -1) {
+    if (usernameTaken(doc, username)) {
       // TODO: show error message
       console.info('user with that name already exists')
       return
