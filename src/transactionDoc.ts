@@ -1,7 +1,7 @@
 import { next as A } from '@automerge/automerge'
 
 // TODO: type for uuid?
-type Id = string
+export type Id = string
 
 export type User = {
   id: Id
