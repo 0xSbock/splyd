@@ -1,10 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+
 import { isValidAutomergeUrl, Repo } from '@automerge/automerge-repo'
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel'
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb'
 import { next as A } from '@automerge/automerge'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
+
+import CssBaseline from '@mui/material/CssBaseline'
 
 import TransactionDoc from './transactionDoc'
 import { DocUrlContext } from './context'
@@ -34,6 +37,7 @@ window.doc = doc
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <CssBaseline />
     <RepoContext.Provider value={repo}>
       <DocUrlContext.Provider value={docUrl}>
         <App />
