@@ -1,9 +1,5 @@
 import { useState, useContext } from 'react'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
-import { Card } from 'primereact/card'
-import { InputText } from 'primereact/inputtext'
-import { FloatLabel } from 'primereact/floatlabel'
-import { Button } from 'primereact/button'
 
 import TransactionDoc, { User } from './transactionDoc'
 import { DocUrlContext } from './context'
@@ -32,6 +28,7 @@ const UserAdd = () => {
 
   // TODO: this should be a proper form
   return (
+    {/* FIXME: removed primereact components
     <Card title="Add a new User">
       <div className="m-0">
         <FloatLabel>
@@ -45,6 +42,7 @@ const UserAdd = () => {
         <Button onClick={() => handleUsernameSubmit()}>Add User</Button>
       </div>
     </Card>
+    */}
   )
 }
 

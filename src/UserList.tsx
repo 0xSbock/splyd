@@ -1,12 +1,6 @@
 import { useState, useContext } from 'react'
 import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
-import { Button } from 'primereact/button'
-import { DataTable } from 'primereact/datatable'
-import { Column } from 'primereact/column'
-import { Dialog } from 'primereact/dialog'
-import { FloatLabel } from 'primereact/floatlabel'
-import { InputText } from 'primereact/inputtext'
 
 import TransactionDoc, { User, Id } from './transactionDoc'
 import { DocUrlContext } from './context'
@@ -80,9 +74,10 @@ const UserList = () => {
 
   return (
     <>
-      <Dialog
+      {/* FIXME: user edit dialog
+      <dialog
         header={`Edit User: ${userEditing?.name}`}
-        visible={toEditID !== undefined}
+        open={toEditID !== undefined}
         style={{ width: '50vw' }}
         onHide={() => onDialogHide}
         draggable={false}
@@ -96,7 +91,9 @@ const UserList = () => {
           <label htmlFor="newUsername">New Username</label>
         </FloatLabel>
         <Button onClick={() => handleEditSave(userEditing?.id)}>Save</Button>
-      </Dialog>
+      </dialog>
+      */}
+      {/* FIXME: User List
       <div className="card">
         <DataTable
           value={doc?.users}
@@ -109,6 +106,7 @@ const UserList = () => {
           <Column header="Delete" body={DeleteUser} />
         </DataTable>
       </div>
+      */}
     </>
   )
 }

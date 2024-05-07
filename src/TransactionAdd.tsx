@@ -1,16 +1,6 @@
 import { useState, useContext } from 'react'
 import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
-import { InputText } from 'primereact/inputtext'
-import {
-  InputNumber,
-  InputNumberValueChangeEvent,
-} from 'primereact/inputnumber'
-import { Calendar } from 'primereact/calendar'
-import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown'
-import { InputTextarea } from 'primereact/inputtextarea'
-import { Divider } from 'primereact/divider'
-import { Button } from 'primereact/button'
 
 import TransactionDoc, {
   Transaction,
@@ -18,7 +8,6 @@ import TransactionDoc, {
   User,
 } from './transactionDoc'
 import { DocUrlContext } from './context'
-import { Checkbox } from 'primereact/checkbox'
 
 const TransactionsAdd = () => {
   const docUrl = useContext(DocUrlContext)
@@ -89,6 +78,8 @@ const TransactionsAdd = () => {
 
   return (
     <>
+      <h1>TODO</h1>
+      {/* FIXME: removed primereact components
       <div className="card flex flex-wrap gap-3 p-fluid">
         <div className="flex-auto">
           <label htmlFor="title" className="font-bold block mb-2">
@@ -220,6 +211,7 @@ const TransactionsAdd = () => {
           </div>
         </div>
       </div>
+      */}
     </>
   )
 }

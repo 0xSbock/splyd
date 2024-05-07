@@ -1,42 +1,9 @@
-import { useState } from 'react'
-
-import { MenuItem } from 'primereact/menuitem'
-import { Menubar } from 'primereact/menubar'
-import Users from './Users'
-import Transactions from './Transactions'
-
 const Home = <h1>Home</h1>
-// const Users = (<h1>Users</h1>)
-const UsersPreRendered = <Users />
-const TransactionsPreRendered = <Transactions />
 
 function App() {
-  const [component, setComponent] = useState(Home)
-
-  const menuItems: MenuItem[] = [
-    {
-      label: 'Home',
-      icon: 'pi pi-home',
-      command: () => setComponent(Home),
-    },
-    {
-      label: 'Users',
-      icon: 'pi pi-users',
-      command: () => setComponent(UsersPreRendered),
-    },
-    {
-      label: 'Transactions',
-      icon: 'pi pi-calculator',
-      command: () => setComponent(TransactionsPreRendered),
-    },
-  ]
-
   return (
     <>
-      <div className="card">
-        <Menubar model={menuItems} />
-      </div>
-      {component}
+      {Home}
     </>
   )
 }
