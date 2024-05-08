@@ -78,25 +78,6 @@ const UserList = () => {
 
   return (
     <>
-      {/* FIXME: user edit dialog
-      <dialog
-        header={`Edit User: ${userEditing?.name}`}
-        open={toEditID !== undefined}
-        style={{ width: '50vw' }}
-        onHide={() => onDialogHide}
-        draggable={false}
-      >
-        <FloatLabel>
-          <InputText
-            id="newUsername"
-            value={newUsername}
-            onChange={(e) => setNewUsername(e.target.value)}
-          />
-          <label htmlFor="newUsername">New Username</label>
-        </FloatLabel>
-        <Button onClick={() => handleEditSave(userEditing?.id)}>Save</Button>
-      </dialog>
-      */}
       <List>
         {doc?.users.map((u) => (
           <ListItem
