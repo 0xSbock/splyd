@@ -2,23 +2,18 @@ import { useState, useContext } from 'react'
 import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
+import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
+import Grid from '@mui/material/Unstable_Grid2'
+import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 
 import TransactionDoc, { User, Id } from './transactionDoc'
 import { DocUrlContext } from './context'
 import { usernameTaken } from './utils'
-
-const header = (
-  <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-    <span className="text-xl text-900 font-bold">List of Users</span>
-  </div>
-)
 
 const createdAt = (user: User) => user.createdAt.toDateString()
 
@@ -75,14 +70,30 @@ const UserList = () => {
   }
 
   const userEditing = doc?.users.find((u: User) => u.id === toEditID)
-
-  return (
-    <>
-      <List>
-        {doc?.users.map((u) => (
-          <ListItem
-            key={u.id}
-            secondaryAction={
+  const renderList = (doc?.users.length || 0) > 0
+  const noUsersFound = (
+    <Box component="section" sx={{ p: 2 }}>
+      <Typography variant="h4" gutterBottom>
+        No users found :(
+      </Typography>
+    </Box>
+  )
+  const list = (
+    <List>
+      {doc?.users.map((u) => (
+        <ListItem key={u.id}>
+          <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+            <Grid xs={10}>
+              <Typography variant="body1" gutterBottom>
+                {u.name}
+              </Typography>
+            </Grid>
+            <Grid xs={1}>
+              <IconButton edge="end" aria-label="edit">
+                <EditIcon />
+              </IconButton>
+            </Grid>
+            <Grid xs={1}>
               <IconButton
                 edge="end"
                 aria-label="delete"
@@ -90,13 +101,13 @@ const UserList = () => {
               >
                 <DeleteIcon />
               </IconButton>
-            }
-          >
-            {u.name}
-          </ListItem>
-        ))}
-      </List>
-    </>
+            </Grid>
+          </Grid>
+        </ListItem>
+      ))}
+    </List>
   )
+
+  return <>{renderList ? list : noUsersFound}</>
 }
 export default UserList
