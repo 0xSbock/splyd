@@ -2,6 +2,14 @@ import { useState, useContext } from 'react'
 import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete'
+
 import TransactionDoc, { User, Id } from './transactionDoc'
 import { DocUrlContext } from './context'
 import { usernameTaken } from './utils'
@@ -44,14 +52,6 @@ const UserList = () => {
     onDialogHide()
   }
 
-  const DeleteUser = (user: User) => (
-    <Button
-      icon="pi pi-trash"
-      severity="danger"
-      onClick={() => handleUserDelete(user.id)}
-    />
-  )
-
   const onDialogOpen = (user: User) => {
     setToEditID(user.id)
     setNewUsername(user.name)
@@ -62,13 +62,17 @@ const UserList = () => {
     setNewUsername('')
   }
 
+  {
+    /*
   const EditUser = (user: User) => (
-    <Button
+    <button
       icon="pi pi-pencil"
       severity="info"
       onClick={() => onDialogOpen(user)}
     />
   )
+  */
+  }
 
   const userEditing = doc?.users.find((u: User) => u.id === toEditID)
 
@@ -93,20 +97,24 @@ const UserList = () => {
         <Button onClick={() => handleEditSave(userEditing?.id)}>Save</Button>
       </dialog>
       */}
-      {/* FIXME: User List
-      <div className="card">
-        <DataTable
-          value={doc?.users}
-          header={header}
-          tableStyle={{ minWidth: '60rem' }}
-        >
-          <Column field="name" header="Name" />
-          <Column field="createdAt" header="Created At" body={createdAt} />
-          <Column header="Edit" body={EditUser} />
-          <Column header="Delete" body={DeleteUser} />
-        </DataTable>
-      </div>
-      */}
+      <List>
+        {doc?.users.map((u) => (
+          <ListItem
+            key={u.id}
+            secondaryAction={
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => handleUserDelete(u.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            }
+          >
+            {u.name}
+          </ListItem>
+        ))}
+      </List>
     </>
   )
 }

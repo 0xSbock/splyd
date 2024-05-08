@@ -27,7 +27,10 @@ import AddCardIcon from '@mui/icons-material/AddCard'
 import Drawer from './Drawer'
 import AppBar from './AppBar'
 
+import UserList from './UserList'
+
 const Home = <h1>Home</h1>
+const UserListRendered = <UserList />
 
 const speedDialActions = [
   { icon: <ShoppingBasketIcon />, name: 'Add a new Expense' },
@@ -40,6 +43,7 @@ const defaultTheme = createTheme()
 
 function App() {
   const [open, setOpen] = useState(false)
+  const [content, setContent] = useState(Home)
   const toggleDrawer = () => setOpen(!open)
   return (
     <>
@@ -89,7 +93,7 @@ function App() {
             </Toolbar>
             <Divider />
             <List component="nav">
-              <ListItemButton>
+              <ListItemButton onClick={() => setContent(UserListRendered)}>
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
@@ -122,7 +126,7 @@ function App() {
                   <Paper
                     sx={{ p: 2, display: 'flex', flexDirection: 'column' }}
                   >
-                    {Home}
+                    {content}
                   </Paper>
                 </Grid>
               </Grid>
