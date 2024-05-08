@@ -27,8 +27,8 @@ const UserAdd = () => {
   }
 
   // TODO: this should be a proper form
-  return (
-    {/* FIXME: removed primereact components
+  return {
+    /* FIXME: removed primereact components
     <Card title="Add a new User">
       <div className="m-0">
         <FloatLabel>
@@ -42,8 +42,8 @@ const UserAdd = () => {
         <Button onClick={() => handleUsernameSubmit()}>Add User</Button>
       </div>
     </Card>
-    */}
-  )
+    */
+  }
 }
 
 export default UserAdd

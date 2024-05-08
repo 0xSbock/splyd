@@ -33,7 +33,7 @@ const speedDialActions = [
   { icon: <ShoppingBasketIcon />, name: 'Add a new Expense' },
   { icon: <PersonAddIcon />, name: 'Add a new Person' },
   { icon: <AddCardIcon />, name: 'Add a new Payment' },
-];
+]
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme()
@@ -119,7 +119,9 @@ function App() {
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                  <Paper
+                    sx={{ p: 2, display: 'flex', flexDirection: 'column' }}
+                  >
                     {Home}
                   </Paper>
                 </Grid>
@@ -143,7 +145,6 @@ function App() {
           </SpeedDial>
         </Box>
       </ThemeProvider>
-
     </>
   )
 }
