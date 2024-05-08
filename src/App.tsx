@@ -27,16 +27,12 @@ import AddCardIcon from '@mui/icons-material/AddCard'
 import Drawer from './Drawer'
 import AppBar from './AppBar'
 
-import UserList from './UserList'
+import { default as UserListImport } from './UserList'
+import { default as UserAddImport } from './UserAdd'
 
 const Home = <h1>Home</h1>
-const UserListRendered = <UserList />
-
-const speedDialActions = [
-  { icon: <ShoppingBasketIcon />, name: 'Add a new Expense' },
-  { icon: <PersonAddIcon />, name: 'Add a new Person' },
-  { icon: <AddCardIcon />, name: 'Add a new Payment' },
-]
+const UserList = <UserListImport />
+const UserAdd = <UserAddImport />
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme()
@@ -45,6 +41,20 @@ function App() {
   const [open, setOpen] = useState(false)
   const [content, setContent] = useState(Home)
   const toggleDrawer = () => setOpen(!open)
+
+  const speedDialActions = [
+    {
+      icon: <ShoppingBasketIcon />,
+      name: 'Add a new Expense',
+      onClick: () => {},
+    },
+    {
+      icon: <PersonAddIcon />,
+      name: 'Add a new Person',
+      onClick: () => setContent(UserAdd),
+    },
+    { icon: <AddCardIcon />, name: 'Add a new Payment', onClick: () => {} },
+  ]
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
@@ -93,7 +103,7 @@ function App() {
             </Toolbar>
             <Divider />
             <List component="nav">
-              <ListItemButton onClick={() => setContent(UserListRendered)}>
+              <ListItemButton onClick={() => setContent(UserList)}>
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
@@ -144,6 +154,7 @@ function App() {
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
+                onClick={action.onClick}
               />
             ))}
           </SpeedDial>

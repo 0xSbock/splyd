@@ -1,6 +1,9 @@
 import { useState, useContext } from 'react'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+
 import TransactionDoc, { User } from './transactionDoc'
 import { DocUrlContext } from './context'
 import { usernameTaken } from './utils'
@@ -27,23 +30,20 @@ const UserAdd = () => {
   }
 
   // TODO: this should be a proper form
-  return {
-    /* FIXME: removed primereact components
-    <Card title="Add a new User">
-      <div className="m-0">
-        <FloatLabel>
-          <InputText
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <label htmlFor="username">Username</label>
-        </FloatLabel>
-        <Button onClick={() => handleUsernameSubmit()}>Add User</Button>
-      </div>
-    </Card>
-    */
-  }
+  return (
+    <>
+      <TextField
+        id="username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        label="Name"
+        variant="outlined"
+      />
+      <Button variant="contained" onClick={() => handleUsernameSubmit()}>
+        Add User
+      </Button>
+    </>
+  )
 }
 
 export default UserAdd
