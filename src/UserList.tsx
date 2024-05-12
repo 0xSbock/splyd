@@ -4,8 +4,10 @@ import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
+import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import ListItem from '@mui/material/ListItem'
+import Snackbar from '@mui/material/Snackbar'
 import Grid from '@mui/material/Unstable_Grid2'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
@@ -26,9 +28,14 @@ const UserList = () => {
   const docUrl = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
   const [toEdit, setToEdit] = useState<
-    { id: Id; username: string | unedfined } | undefined
+    { id: Id; username: string | undefined } | undefined
   >(undefined)
   const [openDialog, setOpenDialog] = useState<boolean>(false)
+  const [alert, setAlert] = useState<{
+    open: boolean
+    severity: 'success' | 'info' | 'warning' | 'error'
+    message: string
+  }>({ open: false, severity: 'error', message: '' })
 
   const handleDialogClose = () => {
     setOpenDialog(false)
@@ -36,20 +43,37 @@ const UserList = () => {
   const handleUserDelete = (id: Id) => {
     const userIndex = doc?.users.findIndex((user: User) => user.id === id)
     if (userIndex === -1) {
-      // TODO: handle error case
-      console.error('Trying to delete unexisting user!')
+      setAlert({
+        open: true,
+        severity: 'error',
+        message: 'Trying to delete an unexisting user.',
+      })
       return
     }
     changeDoc((d) => A.deleteAt(d.users, userIndex as number))
+    setAlert({
+      open: true,
+      severity: 'success',
+      // TODO: add undo method?
+      message: `Deleted user`,
+    })
   }
 
   const handleEditIconClick = (id: Id) => {
-    const username = doc?.users.find((u) => u.id === id).name
+    const username = doc?.users.find((u) => u.id === id)?.name
     setToEdit({
       id,
       username,
     })
     setOpenDialog(true)
+  }
+
+  const handleAlertClose = (
+    _: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') return
+    setAlert({ open: false, severity: 'error', message: '' })
   }
 
   const renderList = (doc?.users.length || 0) > 0
@@ -106,15 +130,31 @@ const UserList = () => {
             const formData = new FormData(event.currentTarget)
             const formJson = Object.fromEntries(formData.entries())
             const newUsername = formJson.newUsername as string
-            if (!toEdit?.id || !newUsername) return
+            if (!toEdit?.id || !newUsername) {
+              setAlert({
+                open: true,
+                severity: 'error',
+                message: 'User ID to edit or new username does not exist',
+              })
+              return
+            }
             if (usernameTaken(doc, newUsername)) {
-              console.info('username already taken. thus, cannot rename.')
+              setAlert({
+                open: true,
+                severity: 'error',
+                message: `Username ${newUsername} is already taken`,
+              })
               return
             }
             changeDoc((d) => {
               const userIndex = d.users.findIndex((u) => u.id === toEdit?.id)
               if (userIndex === -1) return
               d.users[userIndex].name = newUsername
+            })
+            setAlert({
+              open: true,
+              severity: 'success',
+              message: `Renamed user ${toEdit?.username} -> ${newUsername}`,
             })
             handleDialogClose()
           },
@@ -141,6 +181,20 @@ const UserList = () => {
         </DialogActions>
       </Dialog>
       {renderList ? list : noUsersFound}
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+      >
+        <Alert
+          onClose={handleAlertClose}
+          severity={alert.severity}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {alert.message}
+        </Alert>
+      </Snackbar>
     </>
   )
 }
