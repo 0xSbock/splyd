@@ -25,7 +25,9 @@ import TransactionDoc, { User, Id } from './transactionDoc'
 const UserList = () => {
   const docUrl = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
-  const [toEditId, setToEditId] = useState<Id | undefined>(undefined)
+  const [toEdit, setToEdit] = useState<
+    { id: Id; username: string | unedfined } | undefined
+  >(undefined)
   const [openDialog, setOpenDialog] = useState<boolean>(false)
 
   const handleDialogClose = () => {
@@ -42,7 +44,11 @@ const UserList = () => {
   }
 
   const handleEditIconClick = (id: Id) => {
-    setToEditId(id)
+    const username = doc?.users.find((u) => u.id === id).name
+    setToEdit({
+      id,
+      username,
+    })
     setOpenDialog(true)
   }
 
@@ -99,14 +105,14 @@ const UserList = () => {
             event.preventDefault()
             const formData = new FormData(event.currentTarget)
             const formJson = Object.fromEntries(formData.entries())
-            const newUsername = formJson.newUsername
-            if (!toEditId || !newUsername) return
+            const newUsername = formJson.newUsername as string
+            if (!toEdit?.id || !newUsername) return
             if (usernameTaken(doc, newUsername)) {
               console.info('username already taken. thus, cannot rename.')
               return
             }
             changeDoc((d) => {
-              const userIndex = d.users.findIndex((u) => u.id === toEditId)
+              const userIndex = d.users.findIndex((u) => u.id === toEdit?.id)
               if (userIndex === -1) return
               d.users[userIndex].name = newUsername
             })
@@ -114,7 +120,7 @@ const UserList = () => {
           },
         }}
       >
-        <DialogTitle>Edit Username</DialogTitle>
+        <DialogTitle>Edit Username of {toEdit?.username}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -126,6 +132,7 @@ const UserList = () => {
             type="text"
             fullWidth
             variant="standard"
+            defaultValue={toEdit?.username}
           />
         </DialogContent>
         <DialogActions>
