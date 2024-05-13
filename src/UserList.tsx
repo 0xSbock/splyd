@@ -2,23 +2,25 @@ import { useState, useContext } from 'react'
 import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
-import Box from '@mui/material/Box'
-import List from '@mui/material/List'
-import Alert from '@mui/material/Alert'
-import Button from '@mui/material/Button'
-import ListItem from '@mui/material/ListItem'
-import Snackbar from '@mui/material/Snackbar'
-import Grid from '@mui/material/Unstable_Grid2'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
+import {
+  Box,
+  List,
+  Alert,
+  Button,
+  ListItem,
+  Snackbar,
+  Grid,
+  Typography,
+  IconButton,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@mui/material'
+
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import TextField from '@mui/material/TextField'
-
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
 
 import { usernameTaken } from './utils'
 import { DocUrlContext } from './context'
