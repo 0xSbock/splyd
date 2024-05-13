@@ -15,16 +15,15 @@ export type TransactionParticipant = {
   share?: A.Float64
 }
 
-export type Transaction = {
+export type Payment = {
+  id: Id
   amount: A.Float64
   createdAt: Date
   currency: string
-  id: Id
-  participants: TransactionParticipant[]
-  paying: Id | undefined
-  title: string
+  title?: string
   date?: Date
-  description?: string
+  from: Id
+  to: Id
 }
 
 export type Expense = {
@@ -41,7 +40,7 @@ type TransactionDoc = {
   version: A.Uint
   users: User[]
   expenses: Expense[]
-  transactions: Transaction[]
+  payments: Payment[]
 }
 
 export default TransactionDoc

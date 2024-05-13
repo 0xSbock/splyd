@@ -28,7 +28,7 @@ if (isValidAutomergeUrl(rootDocUrl)) {
   doc.change((d) => {
     d.version = new A.Uint(0)
     d.users = []
-    d.transactions = []
+    d.payments = []
     d.expenses = []
   })
 }
