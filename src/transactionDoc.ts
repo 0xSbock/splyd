@@ -27,9 +27,20 @@ export type Transaction = {
   description?: string
 }
 
+export type Expense = {
+  id: Id
+  title: string
+  amount: A.Float64
+  currency?: string
+  by: Id // user id
+  for: Id[] // user ids
+  date?: Date
+}
+
 type TransactionDoc = {
   version: A.Uint
   users: User[]
+  expenses: Expense[]
   transactions: Transaction[]
 }
 

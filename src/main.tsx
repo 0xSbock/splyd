@@ -29,6 +29,7 @@ if (isValidAutomergeUrl(rootDocUrl)) {
     d.version = new A.Uint(0)
     d.users = []
     d.transactions = []
+    d.expenses = []
   })
 }
 const docUrl = (document.location.hash = doc.url)
