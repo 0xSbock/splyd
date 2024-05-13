@@ -30,6 +30,9 @@ if (isValidAutomergeUrl(rootDocUrl)) {
     d.users = []
     d.payments = []
     d.expenses = []
+    d.settings = {
+      defaultCurrency: '€',
+    }
   })
 }
 const docUrl = (document.location.hash = doc.url)

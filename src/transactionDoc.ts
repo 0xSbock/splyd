@@ -37,11 +37,16 @@ export type Expense = {
   date?: Date
 }
 
+export type Settings = {
+  defaultCurrency: string
+}
+
 type TransactionDoc = {
   version: A.Uint
   users: User[]
   expenses: Expense[]
   payments: Payment[]
+  settings: Settings
 }
 
 export default TransactionDoc

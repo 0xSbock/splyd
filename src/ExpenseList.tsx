@@ -66,7 +66,7 @@ const ExpenseList = () => {
                 )}
               </Stack>
               <Typography sx={{ color: 'text.secondary' }}>
-                {Number(expense.amount).toString()} {expense.currency || '€'}
+                {Number(expense.amount).toString()} {expense.currency}
               </Typography>
             </Stack>
           </AccordionSummary>

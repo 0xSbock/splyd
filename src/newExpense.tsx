@@ -54,7 +54,9 @@ const NewExpense = () => {
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
 
   const [showMore, setShowMore] = useState<boolean>(false)
-  const [formData, setFormData] = useState<FormData>({ currency: '€' })
+  const [formData, setFormData] = useState<FormData>({
+    currency: doc?.settings.defaultCurrency,
+  })
   const [alert, setAlert] = useState<{
     open: boolean
     severity: Severity
@@ -106,7 +108,7 @@ const NewExpense = () => {
       severity: 'success',
       message: `Added Expense: ${formData.title}`,
     })
-    setFormData({ currency: '€' })
+    setFormData({ currency: doc?.settings.defaultCurrency })
   }
   const handleMultiSelectChange = (event: SelectChangeEvent<string[]>) => {
     const {
