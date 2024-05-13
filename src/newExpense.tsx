@@ -1,4 +1,4 @@
-import { useState, useContext, FormEvent, ReactNode } from 'react'
+import { useState, useContext, FormEvent } from 'react'
 
 import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
@@ -19,7 +19,6 @@ import {
   Select,
   Snackbar,
   Alert,
-  formGroupClasses,
 } from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
 
@@ -109,8 +108,7 @@ const NewExpense = () => {
     setFormData({ currency: '€' })
   }
   const handleMultiSelectChange = (
-    event: SelectChangeEvent<string[]>,
-    _: ReactNode
+    event: SelectChangeEvent<string[]>
   ) => {
     const {
       target: { value },
