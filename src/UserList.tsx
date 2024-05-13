@@ -9,7 +9,6 @@ import {
   Button,
   ListItem,
   Snackbar,
-  Grid,
   Typography,
   IconButton,
   TextField,
@@ -17,6 +16,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Stack,
 } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -90,13 +90,20 @@ const UserList = () => {
     <List>
       {doc?.users.map((u: User) => (
         <ListItem key={u.id}>
-          <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-            <Grid xs={10}>
-              <Typography variant="body1" gutterBottom>
-                {u.name}
-              </Typography>
-            </Grid>
-            <Grid xs={1}>
+          <Stack
+            direction="row"
+            sx={{ width: '100%', pr: 2 }}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body1" gutterBottom>
+              {u.name}
+            </Typography>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <IconButton
                 edge="end"
                 onClick={() => handleEditIconClick(u.id)}
@@ -104,8 +111,6 @@ const UserList = () => {
               >
                 <EditIcon />
               </IconButton>
-            </Grid>
-            <Grid xs={1}>
               <IconButton
                 edge="end"
                 aria-label="delete"
@@ -113,8 +118,8 @@ const UserList = () => {
               >
                 <DeleteIcon />
               </IconButton>
-            </Grid>
-          </Grid>
+            </Stack>
+          </Stack>
         </ListItem>
       ))}
     </List>
