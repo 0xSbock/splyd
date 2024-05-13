@@ -19,7 +19,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import { DocUrlContext } from './context'
-import TransactionDoc, { User, Id, Expense } from './transactionDoc'
+import TransactionDoc, { Id, Expense } from './transactionDoc'
 import { generateUserMap } from './utils'
 
 const ExpenseList = () => {
