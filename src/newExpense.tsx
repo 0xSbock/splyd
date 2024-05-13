@@ -1,4 +1,4 @@
-import { useState, useContext, FormEvent } from 'react'
+import { useState, useContext, useEffect, FormEvent } from 'react'
 
 import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
@@ -54,14 +54,19 @@ const NewExpense = () => {
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
 
   const [showMore, setShowMore] = useState<boolean>(false)
-  const [formData, setFormData] = useState<FormData>({
-    currency: doc?.settings.defaultCurrency,
-  })
+  const [formData, setFormData] = useState<FormData>({})
   const [alert, setAlert] = useState<{
     open: boolean
     severity: Severity
     message: string
   }>({ open: false, severity: 'error', message: '' })
+
+  // ugly hack to fix race condition between doc loading slowly and setting state
+  useEffect(() => {
+    if (!formData.currency) {
+      setFormData({ ...formData, currency: doc?.settings.defaultCurrency })
+    }
+  }, [doc?.settings.defaultCurrency])
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
