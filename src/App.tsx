@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -30,11 +30,13 @@ import AppBar from './AppBar'
 import { default as UserListImport } from './UserList'
 import { default as UserAddImport } from './UserAdd'
 import { default as NewExpenseImport } from './newExpense'
+import { default as ExpenseListImport } from './ExpenseList'
 
 const Home = <h1>Home</h1>
 const UserList = <UserListImport />
 const UserAdd = <UserAddImport />
 const NewExpense = <NewExpenseImport />
+const ExpenseList = <ExpenseListImport />
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme()
@@ -110,6 +112,12 @@ function App() {
                   <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary="Users" />
+              </ListItemButton>
+              <ListItemButton onClick={() => setContent(ExpenseList)}>
+                <ListItemIcon>
+                  <ShoppingBasketIcon />,
+                </ListItemIcon>
+                <ListItemText primary="Transactions" />
               </ListItemButton>
               <ListItemButton>
                 <ListItemIcon>
