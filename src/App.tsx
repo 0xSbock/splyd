@@ -120,13 +120,13 @@ function App() {
                 <ListItemIcon>
                   <ShoppingBasketIcon />,
                 </ListItemIcon>
-                <ListItemText primary="Transactions" />
+                <ListItemText primary="Expenses" />
               </ListItemButton>
               <ListItemButton>
                 <ListItemIcon>
                   <PaidIcon />
                 </ListItemIcon>
-                <ListItemText primary="Transactions" />
+                <ListItemText primary="Payments" />
               </ListItemButton>
             </List>
           </Drawer>
