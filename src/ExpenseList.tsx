@@ -20,15 +20,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import { DocUrlContext } from './context'
 import TransactionDoc, { User, Id, Expense } from './transactionDoc'
+import { generateUserMap } from './utils'
 
 const ExpenseList = () => {
   const docUrl = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
 
-  const userMap =
-    doc?.users
-      ?.map((u: User) => ({ [u.id]: u.name }))
-      .reduce((acc, cur) => ({ ...acc, ...cur }), {}) || {}
+  const userMap = generateUserMap(doc)
 
   const handleDelete = (id: Id) => {
     const expenseIndex = doc?.expenses.findIndex(
