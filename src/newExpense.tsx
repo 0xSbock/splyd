@@ -98,6 +98,7 @@ const NewExpense = () => {
     const newExpense: Expense = {
       ...formData,
       id: self.crypto.randomUUID(),
+      createdAt: new Date(),
     } as Expense // it's okay to typecast here because we checked the values before
     changeDoc((d) => d.expenses.push(newExpense))
     setAlert({

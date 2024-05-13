@@ -31,6 +31,7 @@ export type Expense = {
   title: string
   amount: A.Float64
   currency?: string
+  createdAt: Date
   by: Id // user id
   for: Id[] // user ids
   date?: Date
