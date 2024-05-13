@@ -107,9 +107,7 @@ const NewExpense = () => {
     })
     setFormData({ currency: '€' })
   }
-  const handleMultiSelectChange = (
-    event: SelectChangeEvent<string[]>
-  ) => {
+  const handleMultiSelectChange = (event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
     } = event
