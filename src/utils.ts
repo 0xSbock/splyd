@@ -9,8 +9,7 @@ export const usernameTaken = (
   return existingUsernames.findIndex((u) => u === username) !== -1
 }
 
-export const generateUserMap = (
-  doc: Doc<TransactionDoc> | undefined
-) => doc?.users
-  ?.map((u: User) => ({ [u.id]: u.name }))
-  .reduce((acc, cur) => ({ ...acc, ...cur }), {}) || {}
+export const generateUserMap = (doc: Doc<TransactionDoc> | undefined) =>
+  doc?.users
+    ?.map((u: User) => ({ [u.id]: u.name }))
+    .reduce((acc, cur) => ({ ...acc, ...cur }), {}) || {}
