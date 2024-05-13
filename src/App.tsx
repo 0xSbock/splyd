@@ -1,20 +1,23 @@
 import { useState } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import List from '@mui/material/List'
-import Typography from '@mui/material/Typography'
-import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
-import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
-import Paper from '@mui/material/Paper'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import SpeedDial from '@mui/material/SpeedDial'
-import SpeedDialIcon from '@mui/material/SpeedDialIcon'
-import SpeedDialAction from '@mui/material/SpeedDialAction'
+
+import {
+  Box,
+  Toolbar,
+  List,
+  Typography,
+  Divider,
+  IconButton,
+  Container,
+  Grid,
+  Paper,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  SpeedDial,
+  SpeedDialIcon,
+  SpeedDialAction,
+} from '@mui/material'
 
 import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
@@ -38,7 +41,7 @@ const UserAdd = <UserAddImport />
 const NewExpense = <NewExpenseImport />
 const ExpenseList = <ExpenseListImport />
 
-// TODO remove, this demo shouldn't need to reset the theme.
+// TODO: remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme()
 
 function App() {
@@ -57,7 +60,7 @@ function App() {
       name: 'Add a new Person',
       onClick: () => setContent(UserAdd),
     },
-    { icon: <AddCardIcon />, name: 'Add a new Payment', onClick: () => {} },
+    { icon: <AddCardIcon />, name: 'Add a new Payment', onClick: () => { } },
   ]
   return (
     <>
