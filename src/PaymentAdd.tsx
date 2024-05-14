@@ -189,6 +189,18 @@ const PaymentAdd = () => {
               />
             </>
           )}
+          {showMore && (
+            <>
+              <InputLabel id="title-label">Title</InputLabel>
+              <Input
+                id="title"
+                value={formData.title || ''}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+              />
+            </>
+          )}
           {!showMore && <Button onClick={() => setShowMore(true)}>More</Button>}
           <Button type="submit">Save</Button>
         </FormGroup>
