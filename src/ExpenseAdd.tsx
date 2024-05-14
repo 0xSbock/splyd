@@ -49,7 +49,7 @@ interface FormData {
 // TODO: can this be importet from the MUI api?
 type Severity = 'success' | 'info' | 'warning' | 'error'
 
-const NewExpense = () => {
+const ExpenseAdd = () => {
   const docUrl = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
 
@@ -260,4 +260,4 @@ const NewExpense = () => {
   )
 }
 
-export default NewExpense
+export default ExpenseAdd

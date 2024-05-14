@@ -32,14 +32,14 @@ import AppBar from './AppBar'
 
 import { default as UserListImport } from './UserList'
 import { default as UserAddImport } from './UserAdd'
-import { default as NewExpenseImport } from './newExpense'
+import { default as ExpenseAddImport } from './ExpenseAdd'
 import { default as ExpenseListImport } from './ExpenseList'
 import { default as PaymentAddImport } from './PaymentAdd'
 
 const Home = <h1>Home</h1>
 const UserList = <UserListImport />
 const UserAdd = <UserAddImport />
-const NewExpense = <NewExpenseImport />
+const ExpenseAdd = <ExpenseAddImport />
 const ExpenseList = <ExpenseListImport />
 const PaymentAdd = <PaymentAddImport />
 
@@ -55,7 +55,7 @@ function App() {
     {
       icon: <ShoppingBasketIcon />,
       name: 'Add a new Expense',
-      onClick: () => setContent(NewExpense),
+      onClick: () => setContent(ExpenseAdd),
     },
     {
       icon: <PersonAddIcon />,
