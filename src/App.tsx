@@ -35,6 +35,7 @@ import { default as UserAddImport } from './UserAdd'
 import { default as ExpenseAddImport } from './ExpenseAdd'
 import { default as ExpenseListImport } from './ExpenseList'
 import { default as PaymentAddImport } from './PaymentAdd'
+import { default as PaymentListImport } from './PaymentList'
 
 const Home = <h1>Home</h1>
 const UserList = <UserListImport />
@@ -42,6 +43,7 @@ const UserAdd = <UserAddImport />
 const ExpenseAdd = <ExpenseAddImport />
 const ExpenseList = <ExpenseListImport />
 const PaymentAdd = <PaymentAddImport />
+const PaymentList = <PaymentListImport />
 
 // TODO: remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme()
@@ -129,7 +131,7 @@ function App() {
                 <ListItemText primary="Expenses" />
               </ListItemButton>
               <ListItemButton>
-                <ListItemIcon>
+                <ListItemIcon onClick={() => setContent(PaymentList)}>
                   <PaidIcon />
                 </ListItemIcon>
                 <ListItemText primary="Payments" />
