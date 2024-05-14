@@ -102,10 +102,13 @@ const PaymentAdd = () => {
       createdAt: new Date(),
     } as Payment
     changeDoc((d) => d.payments.push(newPayment))
+    const message = formData.title
+      ? formData.title
+      : `Added Payment: ${userMap[formData.from]} -> ${userMap[formData.to]}: ${formData.amount.value} ${formData.currency}`
     setAlert({
+      message,
       open: true,
       severity: 'success',
-      message: `Added Payment: ${userMap[formData.from]} -> ${userMap[formData.to]}: ${formData.amount.value} ${formData.currency}`,
     })
     setFormData({ currency: doc?.settings.defaultCurrency })
   }
