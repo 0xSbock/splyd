@@ -113,7 +113,7 @@ const PaymentAdd = () => {
   return (
     <>
       <form onSubmit={onSubmit}>
-        <FormLabel component="legend">New Expense</FormLabel>
+        <FormLabel component="legend">New Payment</FormLabel>
         <FormGroup>
           <InputLabel id="from-label">From</InputLabel>
           <Select
