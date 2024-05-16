@@ -37,7 +37,12 @@ import { default as ExpenseListImport } from './ExpenseList'
 import { default as PaymentAddImport } from './PaymentAdd'
 import { default as PaymentListImport } from './PaymentList'
 
-const Home = <h1>Home</h1>
+
+const Overview = (
+  <>
+    <h1>Overview</h1>
+  </>
+)
 const UserList = <UserListImport />
 const UserAdd = <UserAddImport />
 const ExpenseAdd = <ExpenseAddImport />
@@ -50,7 +55,7 @@ const defaultTheme = createTheme()
 
 function App() {
   const [open, setOpen] = useState(false)
-  const [content, setContent] = useState(Home)
+  const [content, setContent] = useState(Overview)
   const toggleDrawer = () => setOpen(!open)
 
   const speedDialActions = [
