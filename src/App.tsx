@@ -37,7 +37,6 @@ import { default as ExpenseListImport } from './ExpenseList'
 import { default as PaymentAddImport } from './PaymentAdd'
 import { default as PaymentListImport } from './PaymentList'
 
-
 const Overview = (
   <>
     <h1>Overview</h1>
