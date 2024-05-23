@@ -1,5 +1,5 @@
 import Graph from 'graphology'
-import TransactionDoc, { Expense, Id, Payment, User } from './transactionDoc'
+import { Expense, Id, Payment, User } from './transactionDoc'
 
 interface PreComputedEdge {
   from: Id
@@ -13,8 +13,18 @@ interface TransactionGraph {
   }
 }
 
-export function preComputeEdges(doc: TransactionDoc): PreComputedEdge[] {
-  const userIds = doc?.users.map((u: User) => u.id)
+interface GraphDataBase {
+  users: User[]
+  expenses: Expense[]
+  payments: Payment[]
+}
+
+export function preComputeEdges({
+  users,
+  expenses,
+  payments,
+}: GraphDataBase): PreComputedEdge[] {
+  const userIds = users.map((u: User) => u.id)
 
   const transactionGraph: TransactionGraph = userIds
     .map((outerId) => ({
@@ -24,23 +34,22 @@ export function preComputeEdges(doc: TransactionDoc): PreComputedEdge[] {
     }))
     .reduce((acc, cur) => ({ ...acc, ...cur }), {})
 
-  doc.payments.forEach(({ from, to, amount }: Payment) => {
+  payments.forEach(({ from, to, amount }: Payment) => {
     if (from !== to) {
-      transactionGraph[from][to] += Number(amount)
-      transactionGraph[to][from] -= Number(amount)
+      transactionGraph[from][to] += Number(amount.value)
+      transactionGraph[to][from] -= Number(amount.value)
     }
   })
-  doc.expenses.forEach((expense: Expense) => {
+  expenses.forEach((expense: Expense) => {
     const { by, amount } = expense
     const participantNumber = expense.for.length
     expense.for.forEach((f: Id) => {
       if (by !== f) {
-        transactionGraph[by][f] += Number(amount) / participantNumber
-        transactionGraph[f][by] -= Number(amount) / participantNumber
+        transactionGraph[by][f] += Number(amount.value) / participantNumber
+        transactionGraph[f][by] -= Number(amount.value) / participantNumber
       }
     })
   })
-
   // generate all 2-combinations of user ids
   const userCombinations: Array<Array<Id>> = userIds.flatMap((v, i) =>
     userIds.slice(i + 1).map((w) => [v, w])
@@ -65,18 +74,22 @@ export function preComputeEdges(doc: TransactionDoc): PreComputedEdge[] {
   return res
 }
 
-export default function calcualteTransactions(doc: TransactionDoc | undefined) {
-  if (!doc) return {}
-
+export default function calcualteTransactions({
+  users,
+  expenses,
+  payments,
+}: GraphDataBase) {
   const graph = new Graph({
     multi: true,
     allowSelfLoops: false,
     type: 'directed',
   })
-  doc?.users.forEach((u: User) => {
+  users.forEach((u: User) => {
     graph.addNode(u.id, { ...u })
   })
-  preComputeEdges(doc).forEach((p: PreComputedEdge) => {
-    graph.addEdge(p.from, p.to, { amount: p.amount })
-  })
+  preComputeEdges({ users, expenses, payments }).forEach(
+    (p: PreComputedEdge) => {
+      graph.addEdge(p.from, p.to, { amount: p.amount })
+    }
+  )
 }

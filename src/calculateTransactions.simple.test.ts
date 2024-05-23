@@ -1,9 +1,8 @@
 import { expect, test } from 'vitest'
 import { next as A } from '@automerge/automerge'
-import { Repo } from '@automerge/automerge-repo'
 
-import calculateTransactions, { sum } from './calculateTransactions'
-import TransactionDoc, { Id } from './transactionDoc'
+import calculateTransactions from './calculateTransactions'
+import { Id } from './transactionDoc'
 
 const TestUsers = [0, 1, 2].map((i) => ({
   id: `U${i}`,
@@ -35,20 +34,11 @@ const TestPayments = [
   date: new Date(),
 }))
 
-test('minimize between 3', async () => {
-  const repo = new Repo({
-    network: [],
+test('minimize between 3', () => {
+  const res = calculateTransactions({
+    expenses: [],
+    users: TestUsers,
+    payments: TestPayments,
   })
-  const doc = repo.create<TransactionDoc>()
-  doc.change((d) => {
-    d.version = new A.Uint(0)
-    d.users = TestUsers
-    d.payments = TestPayments
-    d.expenses = []
-    d.settings = {
-      defaultCurrency: '€',
-    }
-  })
-  const res = calculateTransactions(await doc.doc())
   console.log(res)
 })
