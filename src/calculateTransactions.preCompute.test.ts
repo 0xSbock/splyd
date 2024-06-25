@@ -60,6 +60,5 @@ test('preComputeEdges between 2', () => {
   })
   expect(computed[0].from).toBe(TestUsers[1].id)
   expect(computed[0].to).toBe(TestUsers[0].id)
-  console.log(computed)
   expect(computed[0].amount).toBe(1000)
 })

@@ -40,5 +40,4 @@ test('minimize between 3', () => {
     users: TestUsers,
     payments: TestPayments,
   })
-  console.log(res)
 })
