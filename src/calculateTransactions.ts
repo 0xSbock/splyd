@@ -74,6 +74,26 @@ export function preComputeEdges({
   return res
 }
 
+// TODO: Loads of optimization to be done here!
+// e.g. stop the candidates loop as soon as it's determined to be a candidate
+export function findCandidates(g: Graph): Array<Id> {
+  const candidates = g.filterNodes((node, _attr) => {
+    const neighbors = g.outNeighbors(node)
+    for (const neighbor of neighbors) {
+      for (const neighborsNeighbor of g.outNeighbors(neighbor)) {
+        if (neighborsNeighbor === node) {
+          continue
+        }
+        if (neighbors.includes(neighborsNeighbor)) {
+          return true
+        }
+      }
+      return false
+    }
+  })
+  return candidates
+}
+
 export default function calcualteTransactions({
   users,
   expenses,
