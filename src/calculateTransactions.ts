@@ -54,7 +54,7 @@ export function preComputeEdges({
   const userCombinations: Array<Array<Id>> = userIds.flatMap((v, i) =>
     userIds.slice(i + 1).map((w) => [v, w])
   )
-  let res: PreComputedEdge[] = []
+  const res: PreComputedEdge[] = []
   userCombinations.forEach(([u1, u2]) => {
     if (transactionGraph[u1][u2] === 0) return
     if (transactionGraph[u1][u2] > 0) {
@@ -74,16 +74,41 @@ export function preComputeEdges({
   return res
 }
 
+type computeInOutResult = {
+  [id: Id]: {
+    in: number
+    out: number
+  }
+}
+export function computeInOut(g: Graph): computeInOutResult {
+  const res: computeInOutResult = {}
+  g.forEachNode((node, _attr) => {
+    res[node] = {
+      in: g.inEdges
+        // @ts-expect-error TODO: figure out if graph does not provide sufficient typing
+        .map((e: unknown, attr: unknown) => attr.amount)
+        .reduce((a: number, b: number) => a + b, 0),
+      out: g.outEdges
+        // @ts-expect-error TODO: figure out if graph does not provide sufficient typing
+        .map((e: unknown, attr: unknown) => attr.amount)
+        .reduce((a: number, b: number) => a + b, 0),
+    }
+  })
+  return res
+}
 
 export type optimizationCandidate = {
   root: Id
-  targets: Id[]
+  targets: {
+    from: Id
+    to: Id
+  }
 }
 
 // TODO: Loads of optimization to be done here!
 // e.g. stop the candidates loop as soon as it's determined to be a candidate
 export function findCandidates(g: Graph): Array<optimizationCandidate> {
-  let candidates: optimizationCandidate[] = []
+  const candidates: optimizationCandidate[] = []
   g.forEachNode((node, _attr) => {
     const neighbors = g.outNeighbors(node)
     for (const neighbor of neighbors) {
@@ -94,13 +119,37 @@ export function findCandidates(g: Graph): Array<optimizationCandidate> {
         if (neighbors.includes(neighborsNeighbor)) {
           candidates.push({
             root: node,
-            targets: [neighborsNeighbor, neighbor],
+            targets: {
+              from: neighbor,
+              to: neighborsNeighbor,
+            },
           })
         }
       }
     }
   })
   return candidates
+}
+
+export function optimizeTransactions(
+  g: Graph,
+  candidates: optimizationCandidate[]
+) {
+  for (const { root, targets } of candidates) {
+    const edgeToBeRemoved = g.edge(targets.from, targets.to)
+    const amount: number = g.getEdgeAttribute(edgeToBeRemoved, 'amount')
+    g.updateEdgeAttribute(
+      g.edge(root, targets.from),
+      'amount',
+      (preAmount: number) => preAmount - amount
+    )
+    g.updateEdgeAttribute(
+      g.edge(root, targets.to),
+      'amount',
+      (preAmount: number) => preAmount + amount
+    )
+    g.dropEdge(edgeToBeRemoved)
+  }
 }
 
 export default function calcualteTransactions({
@@ -113,12 +162,20 @@ export default function calcualteTransactions({
     allowSelfLoops: false,
     type: 'directed',
   })
+  const inOutSum: { [key: string]: { in: number; out: number } } = {}
   users.forEach((u: User) => {
     graph.addNode(u.id, { ...u })
+    inOutSum[u.id] = { in: 0, out: 0 }
   })
   preComputeEdges({ users, expenses, payments }).forEach(
     (p: PreComputedEdge) => {
       graph.addEdge(p.from, p.to, { amount: p.amount })
+      inOutSum[p.from].out += p.amount
+      inOutSum[p.to].in += p.amount
     }
   )
+  graph.updateEachNodeAttributes((_, attr) => ({
+    ...attr,
+    ...inOutSum[attr.id],
+  }))
 }

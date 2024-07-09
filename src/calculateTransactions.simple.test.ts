@@ -34,10 +34,12 @@ const TestPayments = [
   date: new Date(),
 }))
 
+// FIXME: implement test
 test('minimize between 3', () => {
   const res = calculateTransactions({
     expenses: [],
     users: TestUsers,
     payments: TestPayments,
   })
+  expect(res).toBe(true)
 })
