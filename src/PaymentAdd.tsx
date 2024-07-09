@@ -43,7 +43,7 @@ const PaymentAdd = () => {
     if (!formData.currency) {
       setFormData({ ...formData, currency: doc?.settings.defaultCurrency })
     }
-  }, [doc?.settings.defaultCurrency])
+  }, [doc?.settings.defaultCurrency, formData])
 
   const [showMore, setShowMore] = useState(false)
   const [alert, setAlert] = useState<{

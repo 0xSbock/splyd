@@ -66,7 +66,7 @@ const ExpenseAdd = () => {
     if (!formData.currency) {
       setFormData({ ...formData, currency: doc?.settings.defaultCurrency })
     }
-  }, [doc?.settings.defaultCurrency])
+  }, [doc?.settings.defaultCurrency, formData])
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
