@@ -86,11 +86,11 @@ export function computeInOut(g: Graph): computeInOutResult {
     res[node] = {
       in: g.inEdges
         // @ts-expect-error TODO: figure out if graph does not provide sufficient typing
-        .map((e: unknown, attr: unknown) => attr.amount)
+        .map((_e: unknown, attr: unknown) => attr.amount)
         .reduce((a: number, b: number) => a + b, 0),
       out: g.outEdges
         // @ts-expect-error TODO: figure out if graph does not provide sufficient typing
-        .map((e: unknown, attr: unknown) => attr.amount)
+        .map((_e: unknown, attr: unknown) => attr.amount)
         .reduce((a: number, b: number) => a + b, 0),
     }
   })
