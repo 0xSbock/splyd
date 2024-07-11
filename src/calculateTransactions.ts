@@ -19,6 +19,10 @@ interface GraphDataBase {
   payments: Payment[]
 }
 
+/*
+ * sum the transactions into a single value between two participants
+ * e.g. preCompute(A --5-> B, B -10-> A) => B --5-> A
+ */
 export function preComputeEdges({
   users,
   expenses,
