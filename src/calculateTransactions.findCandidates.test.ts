@@ -1,6 +1,6 @@
 import Graph from 'graphology'
 import { expect, test } from 'vitest'
-import { findCandidates, optimizationCandidate } from './calculateTransactions'
+import { findCandidate, optimizationCandidate } from './calculateTransactions'
 
 test('basic candidate search', () => {
   const testGraph = new Graph({
@@ -12,22 +12,21 @@ test('basic candidate search', () => {
   const ids = ['0', '1', '2']
   ids.forEach((i) => testGraph.addNode(i))
 
-  const expected: optimizationCandidate[] = [
-    {
-      root: '0',
-      targets: {
-        from: '1',
-        to: '2',
-      },
+  const expected: optimizationCandidate = {
+    root: '0',
+    targets: {
+      from: '1',
+      to: '2',
     },
-  ]
+  }
 
   testGraph.addDirectedEdge(ids[0], ids[1])
   testGraph.addDirectedEdge(ids[0], ids[2])
   testGraph.addDirectedEdge(ids[1], ids[2])
-  const foundCandidates = findCandidates(testGraph)
 
-  expect(foundCandidates).toStrictEqual(expected)
+  for (const foundCandidate of findCandidate(testGraph)) {
+    expect(foundCandidate).toStrictEqual(expected)
+  }
 })
 
 test('four node', () => {
@@ -63,7 +62,10 @@ test('four node', () => {
     },
   ]
 
-  const foundCandidates = findCandidates(testGraph)
+  const foundCandidates = []
+  for (const candidate of findCandidate(testGraph)) {
+    foundCandidates.push(candidate)
+  }
 
   expect(foundCandidates).toStrictEqual(expected)
 })

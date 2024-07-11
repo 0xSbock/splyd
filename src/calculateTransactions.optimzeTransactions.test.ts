@@ -1,6 +1,6 @@
 import Graph from 'graphology'
 import { expect, test } from 'vitest'
-import { findCandidates, optimizeTransactions } from './calculateTransactions'
+import { findCandidate, optimizeTransaction } from './calculateTransactions'
 
 test('basic optimization', () => {
   const testGraph = new Graph({
@@ -16,7 +16,9 @@ test('basic optimization', () => {
   testGraph.addDirectedEdge(ids[0], ids[2], { amount: 2000 })
   testGraph.addDirectedEdge(ids[1], ids[2], { amount: 5000 })
 
-  optimizeTransactions(testGraph, findCandidates(testGraph))
+  for (const candidate of findCandidate(testGraph)) {
+    optimizeTransaction(testGraph, candidate)
+  }
   expect(testGraph.order).toEqual(3)
   expect(testGraph.size).toEqual(2)
   expect(

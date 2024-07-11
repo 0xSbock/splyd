@@ -110,10 +110,9 @@ export type optimizationCandidate = {
 }
 
 // TODO: Loads of optimization to be done here!
-// e.g. stop the candidates loop as soon as it's determined to be a candidate
-export function findCandidates(g: Graph): Array<optimizationCandidate> {
-  const candidates: optimizationCandidate[] = []
-  g.forEachNode((node, _attr) => {
+// return either a candidate or null if no candidates were found
+export function* findCandidate(g: Graph): Generator<optimizationCandidate> {
+  for (const node of g.nodes()) {
     const neighbors = g.outNeighbors(node)
     for (const neighbor of neighbors) {
       for (const neighborsNeighbor of g.outNeighbors(neighbor)) {
@@ -121,39 +120,37 @@ export function findCandidates(g: Graph): Array<optimizationCandidate> {
           continue
         }
         if (neighbors.includes(neighborsNeighbor)) {
-          candidates.push({
+          yield {
             root: node,
             targets: {
               from: neighbor,
               to: neighborsNeighbor,
             },
-          })
+          }
         }
       }
     }
-  })
-  return candidates
+  }
 }
 
-export function optimizeTransactions(
+export function optimizeTransaction(
   g: Graph,
-  candidates: optimizationCandidate[]
+  candidate: optimizationCandidate
 ) {
-  for (const { root, targets } of candidates) {
-    const edgeToBeRemoved = g.edge(targets.from, targets.to)
-    const amount: number = g.getEdgeAttribute(edgeToBeRemoved, 'amount')
-    g.updateEdgeAttribute(
-      g.edge(root, targets.from),
-      'amount',
-      (preAmount: number) => preAmount - amount
-    )
-    g.updateEdgeAttribute(
-      g.edge(root, targets.to),
-      'amount',
-      (preAmount: number) => preAmount + amount
-    )
-    g.dropEdge(edgeToBeRemoved)
-  }
+  const { root, targets } = candidate
+  const edgeToBeRemoved = g.edge(targets.from, targets.to)
+  const amount: number = g.getEdgeAttribute(edgeToBeRemoved, 'amount')
+  g.updateEdgeAttribute(
+    g.edge(root, targets.from),
+    'amount',
+    (preAmount: number) => preAmount - amount
+  )
+  g.updateEdgeAttribute(
+    g.edge(root, targets.to),
+    'amount',
+    (preAmount: number) => preAmount + amount
+  )
+  g.dropEdge(edgeToBeRemoved)
 }
 
 export default function calcualteTransactions({
