@@ -36,12 +36,9 @@ import { default as ExpenseAddImport } from './ExpenseAdd'
 import { default as ExpenseListImport } from './ExpenseList'
 import { default as PaymentAddImport } from './PaymentAdd'
 import { default as PaymentListImport } from './PaymentList'
+import { default as OverviewImport } from './Overview'
 
-const Overview = (
-  <>
-    <h1>Overview</h1>
-  </>
-)
+const Overview = <OverviewImport />
 const UserList = <UserListImport />
 const UserAdd = <UserAddImport />
 const ExpenseAdd = <ExpenseAddImport />
@@ -103,7 +100,7 @@ function App() {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                Splyd
+                <span onClick={() => setContent(Overview)}>Splyd</span>
               </Typography>
             </Toolbar>
           </AppBar>

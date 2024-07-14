@@ -40,8 +40,14 @@ export function preComputeEdges({
 
   payments.forEach(({ from, to, amount }: Payment) => {
     if (from !== to) {
-      transactionGraph[from][to] += Number(amount.value)
-      transactionGraph[to][from] -= Number(amount.value)
+      // FIXME: why are the Float64 automerge objects suddenly numbers?
+      if (typeof amount === typeof {}) {
+        transactionGraph[from][to] += Number(amount.value)
+        transactionGraph[to][from] -= Number(amount.value)
+      } else {
+        transactionGraph[from][to] += Number(amount)
+        transactionGraph[to][from] -= Number(amount)
+      }
     }
   })
   expenses.forEach((expense: Expense) => {
@@ -49,8 +55,14 @@ export function preComputeEdges({
     const participantNumber = expense.for.length
     expense.for.forEach((f: Id) => {
       if (by !== f) {
-        transactionGraph[by][f] += Number(amount.value) / participantNumber
-        transactionGraph[f][by] -= Number(amount.value) / participantNumber
+        // FIXME: why are the Float64 automerge objects suddenly numbers?
+        if (typeof amount === typeof {}) {
+          transactionGraph[by][f] += Number(amount.value) / participantNumber
+          transactionGraph[f][by] -= Number(amount.value) / participantNumber
+        } else {
+          transactionGraph[by][f] += Number(amount) / participantNumber
+          transactionGraph[f][by] -= Number(amount) / participantNumber
+        }
       }
     })
   })
@@ -153,13 +165,13 @@ export function optimizeTransaction(
   g.dropEdge(edgeToBeRemoved)
 }
 
-export default function calcualteTransactions({
+export function generateGraph({
   users,
   expenses,
   payments,
-}: GraphDataBase) {
+}: GraphDataBase): Graph {
   const graph = new Graph({
-    multi: true,
+    multi: false,
     allowSelfLoops: false,
     type: 'directed',
   })
@@ -170,13 +182,16 @@ export default function calcualteTransactions({
   })
   preComputeEdges({ users, expenses, payments }).forEach(
     (p: PreComputedEdge) => {
-      graph.addEdge(p.from, p.to, { amount: p.amount })
+      graph.addEdge(p.to, p.from, { amount: p.amount })
       inOutSum[p.from].out += p.amount
       inOutSum[p.to].in += p.amount
     }
   )
-  graph.updateEachNodeAttributes((_, attr) => ({
+  graph.updateEachNodeAttributes((_name, attr) => ({
     ...attr,
     ...inOutSum[attr.id],
   }))
+  return graph
 }
+
+export default function calcualteTransactions() {}
