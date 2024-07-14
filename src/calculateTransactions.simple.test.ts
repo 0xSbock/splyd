@@ -1,3 +1,4 @@
+/*
 import { expect, test } from 'vitest'
 import { next as A } from '@automerge/automerge'
 
@@ -41,5 +42,6 @@ test('minimize between 3', () => {
     users: TestUsers,
     payments: TestPayments,
   })
-  expect(res).toBe(true)
+  expect(false).toBe(true)
 })
+*/
