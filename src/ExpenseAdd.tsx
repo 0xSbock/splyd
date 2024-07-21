@@ -50,7 +50,7 @@ interface FormData {
 type Severity = 'success' | 'info' | 'warning' | 'error'
 
 const ExpenseAdd = () => {
-  const docUrl = useContext(DocUrlContext)
+  const [docUrl, _] = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
 
   const [showMore, setShowMore] = useState<boolean>(false)

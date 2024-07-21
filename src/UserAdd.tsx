@@ -11,7 +11,7 @@ import { DocUrlContext } from './context'
 import { usernameTaken } from './utils'
 
 const UserAdd = () => {
-  const docUrl = useContext(DocUrlContext)
+  const [docUrl, _] = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
   const [username, setUsername] = useState('')
   const [alert, setAlert] = useState<{

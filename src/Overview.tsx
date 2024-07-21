@@ -1,5 +1,8 @@
 import { useContext } from 'react'
+
+import { isValidAutomergeUrl } from '@automerge/automerge-repo'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
+
 import { random } from 'graphology-layout'
 import forceAtlas2 from 'graphology-layout-forceatlas2'
 import { Grid } from '@mui/material'
@@ -13,14 +16,19 @@ import {
   generateGraph,
   findCandidate,
   optimizeTransaction,
-} from './calculateTransactions'
-import { cleanUpGraph } from './graphProcessing'
+  cleanUpGraph,
+} from './graphProcessing'
 
 const Overview = () => {
-  const docUrl = useContext(DocUrlContext)
+  const [docUrl, _] = useContext(DocUrlContext)
+  if (isValidAutomergeUrl(docUrl)) {
+    console.log('valid url passed', docUrl)
+  }
   const [doc, _changeDoc] = useDocument<TransactionDoc>(docUrl)
   let graph = null
   if (doc) {
+    const { users, expenses, payments } = doc
+    console.log(users, expenses, payments)
     graph = generateGraph(doc)
     for (const candidate of findCandidate(graph)) {
       optimizeTransaction(graph, candidate)

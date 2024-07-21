@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { next as A } from '@automerge/automerge'
 
 import { Id } from './transactionDoc'
-import { preComputeEdges } from './calculateTransactions'
+import { preComputeEdges } from './graphProcessing'
 
 const TestUsers = [0, 1].map((i) => ({
   id: `U${i}`,

@@ -1,6 +1,6 @@
 import Graph from 'graphology'
 import { expect, test } from 'vitest'
-import { findCandidate, optimizationCandidate } from './calculateTransactions'
+import { findCandidate, OptimizationCandidate } from './graphProcessing'
 
 test('basic candidate search', () => {
   const testGraph = new Graph({
@@ -12,7 +12,7 @@ test('basic candidate search', () => {
   const ids = ['0', '1', '2']
   ids.forEach((i) => testGraph.addNode(i))
 
-  const expected: optimizationCandidate = {
+  const expected: OptimizationCandidate = {
     root: '0',
     targets: {
       from: '1',
@@ -45,7 +45,7 @@ test('four node', () => {
   testGraph.addDirectedEdge(ids[1], ids[3])
   testGraph.addDirectedEdge(ids[2], ids[3])
 
-  const expected: optimizationCandidate[] = [
+  const expected: OptimizationCandidate[] = [
     {
       root: '0',
       targets: {

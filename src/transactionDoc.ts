@@ -43,6 +43,7 @@ export type Settings = {
 
 type TransactionDoc = {
   version: A.Uint
+  name: string
   users: User[]
   expenses: Expense[]
   payments: Payment[]

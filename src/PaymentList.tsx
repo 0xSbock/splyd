@@ -21,7 +21,7 @@ import TransactionDoc, { Id, Payment } from './transactionDoc'
 import { generateUserMap } from './utils'
 
 const PaymentList = () => {
-  const docUrl = useContext(DocUrlContext)
+  const [docUrl, _] = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
 
   const userMap = generateUserMap(doc)

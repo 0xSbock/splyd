@@ -23,7 +23,7 @@ import TransactionDoc, { Id, Expense } from './transactionDoc'
 import { generateUserMap } from './utils'
 
 const ExpenseList = () => {
-  const docUrl = useContext(DocUrlContext)
+  const [docUrl, _] = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
 
   const userMap = generateUserMap(doc)

@@ -1,6 +1,6 @@
 import Graph from 'graphology'
 import { expect, test } from 'vitest'
-import { findCandidate, optimizeTransaction } from './calculateTransactions'
+import { findCandidate, optimizeTransaction } from './graphProcessing'
 
 test('basic optimization', () => {
   const testGraph = new Graph({

@@ -27,7 +27,7 @@ import { DocUrlContext } from './context'
 import TransactionDoc, { User, Id } from './transactionDoc'
 
 const UserList = () => {
-  const docUrl = useContext(DocUrlContext)
+  const [docUrl, _] = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
   const [toEdit, setToEdit] = useState<
     { id: Id; username: string | undefined } | undefined
