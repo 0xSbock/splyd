@@ -11,7 +11,11 @@ import {
 } from '@mui/material'
 
 import { next as A } from '@automerge/automerge'
-import { AnyDocumentId, DocHandle } from '@automerge/automerge-repo'
+import {
+  AnyDocumentId,
+  AutomergeUrl,
+  DocHandle,
+} from '@automerge/automerge-repo'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
 import TransactionDoc, { Id } from './transactionDoc'
@@ -39,9 +43,7 @@ const LocalDocsList = () => {
     }
 
     request.onsuccess = (event) => {
-      // TODO: can we just query the repo instead of indexeddb?
-      // yes we can...
-      // @ts-ignore-error
+      // @ts-expect-error use repo to find all available docs
       const db = event.target.result
       if (
         db &&
@@ -50,6 +52,9 @@ const LocalDocsList = () => {
       ) {
         const transaction = db?.transaction(['documents'])
         const objectStore = transaction.objectStore('documents')
+        // FIXME:
+        // @ts-expect-error we don't need to type this as this code should be replaced by querying the repo
+        // using the provided api
         objectStore.getAllKeys().onsuccess = async (event) => {
           const docs: DocHandle<TransactionDoc>[] = await Promise.all(
             event.target.result
@@ -63,7 +68,7 @@ const LocalDocsList = () => {
                   id: AnyDocumentId
                 ): Promise<{ id: Id; doc: DocHandle<TransactionDoc> }> => ({
                   id: id as string,
-                  // @ts-expect-error
+                  // @ts-expect-error again... just use the repo
                   doc: await repo.find(id).doc(),
                 })
               )
@@ -72,7 +77,7 @@ const LocalDocsList = () => {
         }
       }
     }
-  }, [])
+  }, [repo])
   const createNewDoc = () => {
     if (repo) {
       const doc = repo.create<TransactionDoc>()
@@ -86,8 +91,11 @@ const LocalDocsList = () => {
           defaultCurrency: '€',
         }
       })
-      const docUrl = (document.location.hash = doc.url)
-      setDocUrl(docUrl)
+      const docNew = repo?.find(doc.url)
+      // TODO: setDocUrl could theoretically be unedfined, maybe add some error state for that?
+      if (setDocUrl) {
+        setDocUrl(docNew.url as AutomergeUrl)
+      }
     }
   }
   return (
@@ -104,8 +112,8 @@ const LocalDocsList = () => {
           onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault()
             const formData = new FormData(event.currentTarget)
-            const formJson = Object.fromEntries((formData as any).entries())
-            const groupName = formJson.groupname
+            const formJson = Object.fromEntries(formData.entries())
+            const groupName = formJson.groupname as string
             if (groupName.length <= 1) {
               // FIXME: proper error handling!
               alert('choose a longer group name')
