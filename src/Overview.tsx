@@ -21,14 +21,9 @@ import {
 
 const Overview = () => {
   const [docUrl, _] = useContext(DocUrlContext)
-  if (isValidAutomergeUrl(docUrl)) {
-    console.log('valid url passed', docUrl)
-  }
   const [doc, _changeDoc] = useDocument<TransactionDoc>(docUrl)
   let graph = null
   if (doc) {
-    const { users, expenses, payments } = doc
-    console.log(users, expenses, payments)
     graph = generateGraph(doc)
     for (const candidate of findCandidate(graph)) {
       optimizeTransaction(graph, candidate)
