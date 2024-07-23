@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import {
+  Avatar,
   Box,
   Button,
   Dialog,
@@ -7,11 +8,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Paper,
   TextField,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
 } from '@mui/material'
+
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 import { next as A } from '@automerge/automerge'
 import {
@@ -123,6 +128,11 @@ const LocalDocsList = () => {
       <List>
         {listDocs.map((d) => (
           <ListItem key={d.id} onClick={() => loadDoc(d.id as AutomergeUrl)}>
+            <ListItemAvatar>
+              <Avatar>
+                <AssignmentIcon />
+              </Avatar>
+            </ListItemAvatar>
             <ListItemText primary={d.name} secondary={d.users} />
           </ListItem>
         ))}
