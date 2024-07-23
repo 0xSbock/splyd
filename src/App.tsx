@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import {
   AutomergeUrl,
@@ -14,7 +15,10 @@ import Menu from './Menu'
 import LocalDocsList from './LocalDocList'
 
 function App() {
+  // TODO: remove, this demo shouldn't need to reset the theme.
+  const defaultTheme = createTheme({ palette: { mode: 'dark' } })
   const [docUrl, setDocUrl] = useState<undefined | AutomergeUrl>(undefined)
+
   const repo = useMemo(
     () =>
       new Repo({
@@ -38,11 +42,13 @@ function App() {
     }
   }, [docUrl])
   return (
-    <RepoContext.Provider value={repo}>
-      <DocUrlContext.Provider value={[docUrl, setDocUrl]}>
-        {docUrl === undefined ? <LocalDocsList /> : <Menu />}
-      </DocUrlContext.Provider>
-    </RepoContext.Provider>
+    <ThemeProvider theme={defaultTheme}>
+      <RepoContext.Provider value={repo}>
+        <DocUrlContext.Provider value={[docUrl, setDocUrl]}>
+          {docUrl === undefined ? <LocalDocsList /> : <Menu />}
+        </DocUrlContext.Provider>
+      </RepoContext.Provider>
+    </ThemeProvider >
   )
 }
 
