@@ -8,13 +8,17 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  List,
+  ListItem,
+  ListItemText,
 } from '@mui/material'
 
 import { next as A } from '@automerge/automerge'
 import {
   AnyDocumentId,
   AutomergeUrl,
-  DocHandle,
+  isValidAutomergeUrl,
+  isValidDocumentId,
 } from '@automerge/automerge-repo'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
@@ -24,7 +28,7 @@ import { DocUrlContext } from './context'
 const LocalDocsList = () => {
   const repo = useContext(RepoContext)
   const [_, setDocUrl] = useContext(DocUrlContext)
-  const [docs, setDocs] = useState<DocHandle<TransactionDoc>[]>([])
+  const [docs, setDocs] = useState<{ id: Id; doc: TransactionDoc }[]>([])
   const [dialogOpen, setDialogOpen] = useState(false)
   const [groupName, setGroupName] = useState<string>('')
 
@@ -56,7 +60,7 @@ const LocalDocsList = () => {
         // @ts-expect-error we don't need to type this as this code should be replaced by querying the repo
         // using the provided api
         objectStore.getAllKeys().onsuccess = async (event) => {
-          const docs: DocHandle<TransactionDoc>[] = await Promise.all(
+          const docs: { id: Id; doc: TransactionDoc }[] = await Promise.all(
             event.target.result
               .filter(
                 ([_id, type, _data]: [AnyDocumentId, string, string]) =>
@@ -66,7 +70,7 @@ const LocalDocsList = () => {
               .map(
                 async (
                   id: AnyDocumentId
-                ): Promise<{ id: Id; doc: DocHandle<TransactionDoc> }> => ({
+                ): Promise<{ id: Id; doc: TransactionDoc }> => ({
                   id: id as string,
                   // @ts-expect-error again... just use the repo
                   doc: await repo.find(id).doc(),
@@ -94,13 +98,35 @@ const LocalDocsList = () => {
       const docNew = repo?.find(doc.url)
       // TODO: setDocUrl could theoretically be unedfined, maybe add some error state for that?
       if (setDocUrl) {
-        setDocUrl(docNew.url as AutomergeUrl)
+        setDocUrl(docNew.url)
       }
     }
   }
+  const loadDoc = (id: Id) => {
+    const url = `automerge:${id}`
+    if (isValidDocumentId(id) && isValidAutomergeUrl(url)) {
+      const doc = repo?.find(url)
+      if (setDocUrl) {
+        setDocUrl(url)
+      }
+    }
+  }
+
+  const listDocs = docs.map((d) => ({
+    id: d.id as Id,
+    name: d.doc.name as string,
+    users: d.doc.users.map((u) => u.name).join(', ') || 'No Users',
+  }))
+
   return (
     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      <pre>{JSON.stringify(docs, null, 2)}</pre>
+      <List>
+        {listDocs.map((d) => (
+          <ListItem key={d.id} onClick={() => loadDoc(d.id as AutomergeUrl)}>
+            <ListItemText primary={d.name} secondary={d.users} />
+          </ListItem>
+        ))}
+      </List>
       <Button variant="outlined" onClick={() => setDialogOpen(true)}>
         Create New Doc
       </Button>
