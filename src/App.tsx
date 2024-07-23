@@ -33,8 +33,9 @@ function App() {
   }, [repo])
   useEffect(() => {
     const rootDocUrl = `${document.location.hash.substring(1)}`
-    if (rootDocUrl === docUrl) return
-    document.location.hash = docUrl as string
+    if (docUrl !== undefined && docUrl !== rootDocUrl) {
+      document.location.hash = docUrl as string
+    }
   }, [docUrl])
   return (
     <RepoContext.Provider value={repo}>
