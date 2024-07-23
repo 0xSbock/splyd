@@ -40,6 +40,9 @@ function App() {
     if (docUrl !== undefined && docUrl !== rootDocUrl) {
       document.location.hash = docUrl as string
     }
+    if (rootDocUrl === undefined) {
+      document.location.hash = ''
+    }
   }, [docUrl])
   return (
     <ThemeProvider theme={defaultTheme}>
