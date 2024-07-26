@@ -3,15 +3,14 @@ import { useState, useContext } from 'react'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
 import {
+  AppBar,
   Box,
   Toolbar,
   List,
   Typography,
+  Drawer,
   Divider,
   IconButton,
-  Container,
-  Grid,
-  Paper,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -20,19 +19,18 @@ import {
   SpeedDialAction,
 } from '@mui/material'
 
-import MenuIcon from '@mui/icons-material/Menu'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import PeopleIcon from '@mui/icons-material/People'
-import PaidIcon from '@mui/icons-material/Paid'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
-import AddCardIcon from '@mui/icons-material/AddCard'
+import {
+  Menu as MenuIcon,
+  Home as HomeIcon,
+  People as PeopleIcon,
+  Paid as PaidIcon,
+  PersonAdd as PersonAddIcon,
+  ShoppingBasket as ShoppingBasketIcon,
+  AddCard as AddCardIcon,
+} from '@mui/icons-material'
 
 import { DocUrlContext } from './context'
 import TransactionDoc from './transactionDoc'
-
-import Drawer from './Drawer'
-import AppBar from './AppBar'
 
 import { default as UserListImport } from './UserList'
 import { default as UserAddImport } from './UserAdd'
@@ -50,139 +48,197 @@ const ExpenseList = <ExpenseListImport />
 const PaymentAdd = <PaymentAddImport />
 const PaymentList = <PaymentListImport />
 
+const drawerWidth = 240
+
 const Menu = () => {
-  const [open, setOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
+
   const [content, setContent] = useState(Overview)
   const [docUrl, _] = useContext(DocUrlContext)
   const [doc, _changeDoc] = useDocument<TransactionDoc>(docUrl)
-  const toggleDrawer = () => setOpen(!open)
+
+  const handleDrawerClose = () => {
+    setIsClosing(true)
+    setMobileOpen(false)
+  }
+
+  const handleDrawerTransitionEnd = () => {
+    setIsClosing(false)
+  }
+
+  const handleDrawerToggle = () => {
+    if (!isClosing) {
+      setMobileOpen(!mobileOpen)
+    }
+  }
 
   const speedDialActions = [
     {
       icon: <ShoppingBasketIcon />,
       name: 'Add a new Expense',
-      onClick: () => setContent(ExpenseAdd),
+      onClick: () => {
+        setContent(ExpenseAdd)
+        setMobileOpen(false)
+      },
     },
     {
       icon: <PersonAddIcon />,
       name: 'Add a new Person',
-      onClick: () => setContent(UserAdd),
+      onClick: () => {
+        setContent(UserAdd), setMobileOpen(false)
+      },
     },
     {
       icon: <AddCardIcon />,
       name: 'Add a new Payment',
-      onClick: () => setContent(PaymentAdd),
+      onClick: () => {
+        setContent(PaymentAdd)
+        setMobileOpen(false)
+      },
     },
   ]
+  const drawerContent = [
+    {
+      name: 'Overview',
+      label: 'Overview',
+      icon: <HomeIcon />,
+      onClick: () => {
+        setContent(Overview)
+        setMobileOpen(false)
+      },
+    },
+    {
+      name: 'Users',
+      label: 'User List',
+      icon: <PeopleIcon />,
+      onClick: () => setContent(UserList),
+    },
+    {
+      name: 'Expenses',
+      label: 'Expense List',
+      icon: <ShoppingBasketIcon />,
+      onClick: () => setContent(ExpenseList),
+    },
+    {
+      name: 'Payments',
+      label: 'Payment List',
+      icon: <PaidIcon />,
+      onClick: () => setContent(PaymentList),
+    },
+  ]
+
+  const drawer = (
+    <>
+      <Toolbar />
+      <Divider />
+      <List component="nav">
+        {drawerContent.map((entry) => (
+          <ListItemButton
+            onClick={entry.onClick}
+            key={entry.label}
+            aria-label={entry.label}
+          >
+            <ListItemIcon>{entry.icon}</ListItemIcon>
+            <ListItemText primary={entry.name} />
+          </ListItemButton>
+        ))}
+      </List>
+    </>
+  )
   return (
     <>
       <Box sx={{ display: 'flex' }}>
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
+        <AppBar
+          position="fixed"
+          sx={{
+            ml: { sm: `${drawerWidth}px` },
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+        >
+          <Toolbar>
             <IconButton
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              onClick={toggleDrawer}
+              onClick={handleDrawerToggle}
               sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
+                mr: '2',
+                display: { sm: 'none' },
               }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
+            <Typography component="h1" variant="h6" noWrap>
               <span onClick={() => setContent(Overview)}>
                 Splyd - {doc?.name}
               </span>
             </Typography>
           </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="navigation drawer"
+        >
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onTransitionEnd={handleDrawerTransitionEnd}
+            onClose={handleDrawerClose}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
+              display: { xs: 'block', sm: 'none' },
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
+                width: drawerWidth,
+              },
             }}
           >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            <ListItemButton onClick={() => setContent(UserList)}>
-              <ListItemIcon>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Users" />
-            </ListItemButton>
-            <ListItemButton onClick={() => setContent(ExpenseList)}>
-              <ListItemIcon>
-                <ShoppingBasketIcon />,
-              </ListItemIcon>
-              <ListItemText primary="Expenses" />
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon onClick={() => setContent(PaymentList)}>
-                <PaidIcon />
-              </ListItemIcon>
-              <ListItemText primary="Payments" />
-            </ListItemButton>
-          </List>
-        </Drawer>
+            {drawer}
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
+                width: drawerWidth,
+              },
+            }}
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Box>
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
             flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
+            p: 3,
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  {content}
-                </Paper>
-              </Grid>
-            </Grid>
-          </Container>
+          {content}
         </Box>
       </Box>
-      <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 }}>
-        <SpeedDial
-          ariaLabel="add"
-          sx={{ position: 'absolute', bottom: 16, right: 16 }}
-          icon={<SpeedDialIcon />}
-        >
-          {speedDialActions.map((action) => (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-              onClick={action.onClick}
-            />
-          ))}
-        </SpeedDial>
-      </Box>
+      <SpeedDial
+        ariaLabel="add"
+        sx={{ position: 'absolute', bottom: 16, right: 16 }}
+        icon={<SpeedDialIcon />}
+      >
+        {speedDialActions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            onClick={action.onClick}
+          />
+        ))}
+      </SpeedDial>
     </>
   )
 }
