@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+
+import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
 import {
   Box,
@@ -26,6 +28,9 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import AddCardIcon from '@mui/icons-material/AddCard'
 
+import { DocUrlContext } from './context'
+import TransactionDoc from './transactionDoc'
+
 import Drawer from './Drawer'
 import AppBar from './AppBar'
 
@@ -48,6 +53,8 @@ const PaymentList = <PaymentListImport />
 const Menu = () => {
   const [open, setOpen] = useState(false)
   const [content, setContent] = useState(Overview)
+  const [docUrl, _] = useContext(DocUrlContext)
+  const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
   const toggleDrawer = () => setOpen(!open)
 
   const speedDialActions = [
@@ -95,7 +102,9 @@ const Menu = () => {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              <span onClick={() => setContent(Overview)}>Splyd</span>
+              <span onClick={() => setContent(Overview)}>
+                Splyd - {doc.name}
+              </span>
             </Typography>
           </Toolbar>
         </AppBar>
@@ -150,9 +159,7 @@ const Menu = () => {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <Paper
-                  sx={{ p: 2, display: 'flex', flexDirection: 'column' }}
-                >
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                   {content}
                 </Paper>
               </Grid>
