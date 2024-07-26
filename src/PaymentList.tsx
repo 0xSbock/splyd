@@ -103,14 +103,16 @@ const PaymentList = () => {
     </Accordion>
   ))
 
-  return <>
-    <Typography variant="h3" sx={{ mb: 2 }}>
-      Payments
-    </Typography>
-    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-      {renderList ? paymentList : emptyListInfo}
-    </Paper>
-  </>
+  return (
+    <>
+      <Typography variant="h3" sx={{ mb: 2 }}>
+        Payments
+      </Typography>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+        {renderList ? paymentList : emptyListInfo}
+      </Paper>
+    </>
+  )
 }
 
 export default PaymentList
