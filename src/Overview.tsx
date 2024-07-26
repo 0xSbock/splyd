@@ -4,7 +4,7 @@ import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
 import { random } from 'graphology-layout'
 import forceAtlas2 from 'graphology-layout-forceatlas2'
-import { Grid } from '@mui/material'
+import { Grid, Typography, Paper } from '@mui/material'
 
 import { DocUrlContext } from './context'
 import TransactionDoc from './transactionDoc'
@@ -52,20 +52,22 @@ const Overview = () => {
   }
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <h1>Overview</h1>
+      <Typography variant="h3" sx={{ mb: 2 }}>
+        Overview
+      </Typography>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Settlement
+              graph={graph}
+              defaultCurrency={doc?.settings.defaultCurrency || '€'}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <GraphVisualization graph={graph} />
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Settlement
-            graph={graph}
-            defaultCurrency={doc?.settings.defaultCurrency || '€'}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <GraphVisualization graph={graph} />
-        </Grid>
-      </Grid>
+      </Paper>
     </>
   )
 }
