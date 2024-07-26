@@ -54,7 +54,7 @@ const Menu = () => {
   const [open, setOpen] = useState(false)
   const [content, setContent] = useState(Overview)
   const [docUrl, _] = useContext(DocUrlContext)
-  const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
+  const [doc, _changeDoc] = useDocument<TransactionDoc>(docUrl)
   const toggleDrawer = () => setOpen(!open)
 
   const speedDialActions = [
@@ -103,7 +103,7 @@ const Menu = () => {
               sx={{ flexGrow: 1 }}
             >
               <span onClick={() => setContent(Overview)}>
-                Splyd - {doc.name}
+                Splyd - {doc?.name}
               </span>
             </Typography>
           </Toolbar>
