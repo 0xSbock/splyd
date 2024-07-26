@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 
-import { isValidAutomergeUrl } from '@automerge/automerge-repo'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
 import { random } from 'graphology-layout'
