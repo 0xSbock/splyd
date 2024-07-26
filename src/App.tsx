@@ -1,5 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+import { Container } from '@mui/material'
 
 import {
   AutomergeUrl,
@@ -48,10 +50,13 @@ function App() {
     <ThemeProvider theme={defaultTheme}>
       <RepoContext.Provider value={repo}>
         <DocUrlContext.Provider value={[docUrl, setDocUrl]}>
-          {docUrl === undefined ? <LocalDocsList /> : <Menu />}
+          <Container component="main" width="100vw">
+            <CssBaseline />
+            {docUrl === undefined ? <LocalDocsList /> : <Menu />}
+          </Container>
         </DocUrlContext.Provider>
       </RepoContext.Provider>
-    </ThemeProvider >
+    </ThemeProvider>
   )
 }
 
