@@ -3,7 +3,6 @@ import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
 import {
-  Box,
   List,
   Alert,
   Button,
@@ -17,6 +16,7 @@ import {
   DialogContent,
   DialogTitle,
   Stack,
+  Paper,
 } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -187,7 +187,13 @@ const UserList = () => {
           <Button type="submit">Save</Button>
         </DialogActions>
       </Dialog>
-      {renderList ? list : emptyListInfo}
+      <Typography variant="h3" sx={{ mb: 2 }}>
+        Users
+      </Typography>
+
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+        {renderList ? list : emptyListInfo}
+      </Paper>
       <Snackbar
         open={alert.open}
         autoHideDuration={6000}

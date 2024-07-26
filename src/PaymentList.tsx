@@ -12,6 +12,7 @@ import {
   AccordionDetails,
   Button,
   Typography,
+  Paper,
 } from '@mui/material'
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -102,7 +103,14 @@ const PaymentList = () => {
     </Accordion>
   ))
 
-  return <>{renderList ? paymentList : emptyListInfo}</>
+  return <>
+    <Typography variant="h3" sx={{ mb: 2 }}>
+      Payments
+    </Typography>
+    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+      {renderList ? paymentList : emptyListInfo}
+    </Paper>
+  </>
 }
 
 export default PaymentList

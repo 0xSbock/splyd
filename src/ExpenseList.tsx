@@ -13,6 +13,7 @@ import {
   AccordionDetails,
   Button,
   Typography,
+  Paper,
   Chip,
 } from '@mui/material'
 
@@ -120,7 +121,16 @@ const ExpenseList = () => {
     </Accordion>
   ))
 
-  return <>{renderList ? expenseList : emptyListInfo}</>
+  return (
+    <>
+      <Typography variant="h3" sx={{ mb: 2 }}>
+        Expenses
+      </Typography>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+        {renderList ? expenseList : emptyListInfo}
+      </Paper>
+    </>
+  )
 }
 
 export default ExpenseList
