@@ -25,6 +25,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import { usernameTaken } from './utils'
 import { DocUrlContext } from './context'
 import TransactionDoc, { User, Id } from './transactionDoc'
+import EmptyListInfo from './EmptyListInfo'
 
 const UserList = () => {
   const [docUrl, _] = useContext(DocUrlContext)
@@ -79,12 +80,11 @@ const UserList = () => {
   }
 
   const renderList = (doc?.users.length || 0) > 0
-  const noUsersFound = (
-    <Box component="section" sx={{ p: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        No users found :(
-      </Typography>
-    </Box>
+  const emptyListInfo = (
+    <EmptyListInfo
+      heading={'Currently no users in document'}
+      info={'To add new users click on the action button in the bottom right.'}
+    />
   )
   const list = (
     <List>
@@ -187,7 +187,7 @@ const UserList = () => {
           <Button type="submit">Save</Button>
         </DialogActions>
       </Dialog>
-      {renderList ? list : noUsersFound}
+      {renderList ? list : emptyListInfo}
       <Snackbar
         open={alert.open}
         autoHideDuration={6000}
