@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import {
   Avatar,
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -10,13 +9,17 @@ import {
   DialogTitle,
   Paper,
   TextField,
+  Toolbar,
+  Typography,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  IconButton,
 } from '@mui/material'
 
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIcon from '@mui/icons-material/Assignment'
+import MenuIcon from '@mui/icons-material/Menu'
 
 import { next as A } from '@automerge/automerge'
 import {
@@ -29,6 +32,8 @@ import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
 import TransactionDoc, { Id } from './transactionDoc'
 import { DocUrlContext } from './context'
+
+import AppBar from './AppBar'
 
 const LocalDocsList = () => {
   const repo = useContext(RepoContext)
@@ -124,22 +129,74 @@ const LocalDocsList = () => {
   }))
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      <List>
-        {listDocs.map((d) => (
-          <ListItem key={d.id} onClick={() => loadDoc(d.id as AutomergeUrl)}>
-            <ListItemAvatar>
-              <Avatar>
-                <AssignmentIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={d.name} secondary={d.users} />
-          </ListItem>
-        ))}
-      </List>
-      <Button variant="outlined" onClick={() => setDialogOpen(true)}>
-        Create New Doc
-      </Button>
+    <>
+      <AppBar position="absolute" open={false}>
+        <Toolbar
+          sx={{
+            pr: '24px', // keep right padding when drawer closed
+          }}
+        >
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            sx={{ marginRight: '36px' }}
+            disabled
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 1 }}
+          >
+            Splyd
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      {listDocs.length > 0 && (
+        <Paper sx={{ padding: '10%' }}>
+          <Typography component="h1" variant="h5">
+            Choose an existing Document
+          </Typography>
+          <List>
+            {listDocs.map((d) => (
+              <ListItem
+                key={d.id}
+                onClick={() => loadDoc(d.id as AutomergeUrl)}
+              >
+                <ListItemAvatar>
+                  <Avatar>
+                    <AssignmentIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={d.name} secondary={d.users} />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      )}
+      <Paper
+        sx={{
+          padding: '5%',
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setDialogOpen(true)}
+          sx={{ maxWidth: '75%' }}
+          fullWidth
+        >
+          Create New Doc
+        </Button>
+      </Paper>
       <Dialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
@@ -183,7 +240,7 @@ const LocalDocsList = () => {
           <Button type="submit">Create</Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </>
   )
 }
 
