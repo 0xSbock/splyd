@@ -117,7 +117,7 @@ const LocalDocsList = () => {
     if (isValidDocumentId(id) && isValidAutomergeUrl(url)) {
       const doc = repo?.find(url)
       if (setDocUrl) {
-        setDocUrl(url)
+        setDocUrl(doc?.url)
       }
     }
   }
