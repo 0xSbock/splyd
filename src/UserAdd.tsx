@@ -1,10 +1,15 @@
 import { useState, useContext } from 'react'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
-import Alert from '@mui/material/Alert'
-import Button from '@mui/material/Button'
-import Snackbar from '@mui/material/Snackbar'
-import TextField from '@mui/material/TextField'
+import {
+  Alert,
+  Button,
+  Grid,
+  Snackbar,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material'
 
 import TransactionDoc, { User } from './transactionDoc'
 import { DocUrlContext } from './context'
@@ -56,30 +61,50 @@ const UserAdd = () => {
   // TODO: this should be a proper form
   return (
     <>
-      <TextField
-        id="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        label="Name"
-        variant="outlined"
-      />
-      <Button variant="contained" onClick={() => handleUsernameSubmit()}>
-        Add User
-      </Button>
-      <Snackbar
-        open={alert.open}
-        autoHideDuration={6000}
-        onClose={handleAlertClose}
-      >
-        <Alert
+      <Typography variant="h3" sx={{ mb: 2 }}>
+        Add a User
+      </Typography>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+        <Typography sx={{ mb: 2 }} variant="subtitle1" gutterBottom>
+          Add users to your document and let them participate in expenses or
+          payments.
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={8}>
+            <TextField
+              sx={{ width: '100%' }}
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              label="Name"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Button
+              sx={{ height: '100%', width: '100%' }}
+              variant="contained"
+              onClick={() => handleUsernameSubmit()}
+            >
+              Add User
+            </Button>
+          </Grid>
+        </Grid>
+        <Snackbar
+          open={alert.open}
+          autoHideDuration={6000}
           onClose={handleAlertClose}
-          severity={alert.severity}
-          variant="filled"
-          sx={{ width: '100%' }}
         >
-          {alert.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={handleAlertClose}
+            severity={alert.severity}
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
+      </Paper>
     </>
   )
 }
