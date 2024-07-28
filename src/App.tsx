@@ -11,9 +11,12 @@ import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-networ
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
+import { ErrorBoundary } from 'react-error-boundary'
+
 import { DocUrlContext } from './context'
 import Menu from './Menu'
 import LocalDocsList from './LocalDocList'
+import FallbackComponent from './FallBackComponent'
 
 function App() {
   // TODO: remove, this demo shouldn't need to reset the theme.
@@ -50,7 +53,9 @@ function App() {
       <RepoContext.Provider value={repo}>
         <DocUrlContext.Provider value={[docUrl, setDocUrl]}>
           <CssBaseline />
-          {docUrl === undefined ? <LocalDocsList /> : <Menu />}
+          <ErrorBoundary FallbackComponent={FallbackComponent}>
+            {docUrl === undefined ? <LocalDocsList /> : <Menu />}
+          </ErrorBoundary>
         </DocUrlContext.Provider>
       </RepoContext.Provider>
     </ThemeProvider>
