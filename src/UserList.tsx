@@ -17,6 +17,7 @@ import {
   DialogTitle,
   Stack,
   Paper,
+  Transitions,
 } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -53,6 +54,18 @@ const UserList = () => {
       })
       return
     }
+
+    doc?.expenses.forEach((expense, i) => {
+      if (expense.by === id) {
+        changeDoc((d) => A.deleteAt(d.expenses, i))
+        return
+      }
+      if (expense.for.includes(id)) {
+        const toDeleteId = expense.for.findIndex((x: Id) => x === id)
+        changeDoc((d) => A.deleteAt(d.expenses[i].for, toDeleteId))
+        return
+      }
+    })
     changeDoc((d) => A.deleteAt(d.users, userIndex as number))
     setAlert({
       open: true,

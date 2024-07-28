@@ -35,6 +35,11 @@ const PaymentList = () => {
       (exp: Payment) => exp.id === id
     )
     changeDoc((d) => A.deleteAt(d.payments, paymentIndex as number))
+    doc?.payments.forEach((payment, i) => {
+      if (payment.from === id || payment.to === id) {
+        changeDoc((d) => A.deleteAt(d.payments, i))
+      }
+    })
   }
 
   const emptyListInfo = (
