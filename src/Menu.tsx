@@ -222,7 +222,14 @@ const Menu = () => {
           }}
         >
           <Toolbar />
-          {content}
+          <Box
+            sx={{
+              paddingLeft: { md: '10%', lg: '15%' },
+              paddingRight: { md: '10%', lg: '15%' },
+            }}
+          >
+            {content}
+          </Box>
         </Box>
       </Box>
       <SpeedDial
