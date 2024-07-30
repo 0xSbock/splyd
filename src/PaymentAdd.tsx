@@ -4,16 +4,18 @@ import { next as A } from '@automerge/automerge'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
 import {
+  Alert,
   Button,
-  FormLabel,
-  FormGroup,
   Input,
   InputLabel,
   InputAdornment,
   Select,
   MenuItem,
   Snackbar,
-  Alert,
+  FormLabel,
+  FormGroup,
+  Paper,
+  Typography,
 } from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
 
@@ -115,113 +117,129 @@ const PaymentAdd = () => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <FormLabel component="legend">New Payment</FormLabel>
-        <FormGroup>
-          <InputLabel id="from-label">From</InputLabel>
-          <Select
-            labelId="from-label"
-            id="from"
-            value={formData.from || ''}
-            onChange={(e: SelectChangeEvent) =>
-              setFormData({ ...formData, from: e.target.value as Id })
-            }
-            label="from"
-          >
-            {doc?.users.map((u: User) => (
-              <MenuItem key={`from-${u.id}`} value={u.id}>
-                {u.name}
-              </MenuItem>
-            ))}
-          </Select>
-          <InputLabel id="to-label">To</InputLabel>
-          <Select
-            labelId="to-label"
-            id="to"
-            value={formData.to || ''}
-            onChange={(e: SelectChangeEvent) =>
-              setFormData({ ...formData, to: e.target.value as Id })
-            }
-            label="to"
-          >
-            {doc?.users.map((u: User) => (
-              <MenuItem key={`to-${u.id}`} value={u.id}>
-                {u.name}
-              </MenuItem>
-            ))}
-          </Select>
-          <InputLabel htmlFor="amount">Amount</InputLabel>
-          <Input
-            id="amount"
-            value={formData.amount?.value || ''}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                amount: new A.Float64(Number(e.target.value)),
-              })
-            }
-            startAdornment={
-              <InputAdornment position="start">
-                {formData.currency}
-              </InputAdornment>
-            }
-            type="number"
-          />
-          {showMore && (
-            <>
-              <InputLabel id="currency-label">Currency</InputLabel>
-              <Input
-                id="currency"
-                value={formData.currency}
-                onChange={(e) =>
-                  setFormData({ ...formData, currency: e.target.value })
-                }
-              />
-            </>
-          )}
-          {showMore && (
-            <>
-              <InputLabel id="date-label">Date</InputLabel>
-              <Input
-                id="date"
-                type="date"
-                value={formData.date?.toISOString().split('T')[0] || ''}
-                onChange={(e) =>
-                  setFormData({ ...formData, date: new Date(e.target.value) })
-                }
-              />
-            </>
-          )}
-          {showMore && (
-            <>
-              <InputLabel id="title-label">Title</InputLabel>
-              <Input
-                id="title"
-                value={formData.title || ''}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
-              />
-            </>
-          )}
-          {!showMore && <Button onClick={() => setShowMore(true)}>More</Button>}
-          <Button type="submit">Save</Button>
-        </FormGroup>
-      </form>
-      <Snackbar
-        open={alert.open}
-        autoHideDuration={6000}
-        onClose={handleAlertClose}
-      >
-        <Alert
+      <Typography variant="h3" sx={{ mb: 2 }}>
+        Add a new Payment
+      </Typography>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+        <Typography sx={{ mb: 2 }} variant="subtitle1" gutterBottom>
+          A Payment is a one-to-one transaction between two persons.
+        </Typography>
+        <form onSubmit={onSubmit}>
+          <FormLabel component="legend">New Payment</FormLabel>
+          <FormGroup>
+            <InputLabel id="from-label" required>
+              From
+            </InputLabel>
+            <Select
+              labelId="from-label"
+              id="from"
+              value={formData.from || ''}
+              onChange={(e: SelectChangeEvent) =>
+                setFormData({ ...formData, from: e.target.value as Id })
+              }
+              label="from"
+            >
+              {doc?.users.map((u: User) => (
+                <MenuItem key={`from-${u.id}`} value={u.id}>
+                  {u.name}
+                </MenuItem>
+              ))}
+            </Select>
+            <InputLabel id="to-label" required>
+              To
+            </InputLabel>
+            <Select
+              labelId="to-label"
+              id="to"
+              value={formData.to || ''}
+              onChange={(e: SelectChangeEvent) =>
+                setFormData({ ...formData, to: e.target.value as Id })
+              }
+              label="to"
+            >
+              {doc?.users.map((u: User) => (
+                <MenuItem key={`to-${u.id}`} value={u.id}>
+                  {u.name}
+                </MenuItem>
+              ))}
+            </Select>
+            <InputLabel htmlFor="amount" required>
+              Amount
+            </InputLabel>
+            <Input
+              id="amount"
+              value={formData.amount?.value || ''}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  amount: new A.Float64(Number(e.target.value)),
+                })
+              }
+              startAdornment={
+                <InputAdornment position="start">
+                  {formData.currency}
+                </InputAdornment>
+              }
+              type="number"
+            />
+            {showMore && (
+              <>
+                <InputLabel id="currency-label">Currency</InputLabel>
+                <Input
+                  id="currency"
+                  value={formData.currency}
+                  onChange={(e) =>
+                    setFormData({ ...formData, currency: e.target.value })
+                  }
+                />
+              </>
+            )}
+            {showMore && (
+              <>
+                <InputLabel id="date-label">Date</InputLabel>
+                <Input
+                  id="date"
+                  type="date"
+                  value={formData.date?.toISOString().split('T')[0] || ''}
+                  onChange={(e) =>
+                    setFormData({ ...formData, date: new Date(e.target.value) })
+                  }
+                />
+              </>
+            )}
+            {showMore && (
+              <>
+                <InputLabel id="title-label">Title</InputLabel>
+                <Input
+                  id="title"
+                  value={formData.title || ''}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                />
+              </>
+            )}
+            {!showMore && (
+              <Button onClick={() => setShowMore(true)}>More</Button>
+            )}
+            <Button type="submit">Save</Button>
+          </FormGroup>
+        </form>
+        <Snackbar
+          open={alert.open}
+          autoHideDuration={6000}
           onClose={handleAlertClose}
-          severity={alert.severity}
-          variant="filled"
-          sx={{ width: '100%' }}
         >
-          {alert.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={handleAlertClose}
+            severity={alert.severity}
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
+      </Paper>
     </>
   )
 }
