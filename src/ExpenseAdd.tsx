@@ -19,6 +19,8 @@ import {
   Select,
   Snackbar,
   Alert,
+  Typography,
+  Paper,
 } from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
 
@@ -143,105 +145,116 @@ const ExpenseAdd = () => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <FormLabel component="legend">New Expense</FormLabel>
-        <FormGroup>
-          <InputLabel htmlFor="title">Title</InputLabel>
-          <Input
-            id="title"
-            value={formData.title || ''}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
-          />
-          <InputLabel htmlFor="amount">Amount</InputLabel>
-          <Input
-            id="amount"
-            value={formData.amount?.value || ''}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                amount: new A.Float64(Number(e.target.value)),
-              })
-            }
-            startAdornment={
-              <InputAdornment position="start">
-                {formData.currency || ''}
-              </InputAdornment>
-            }
-            type="number"
-          />
-          {showMore && (
-            <>
-              <InputLabel id="currency-label">Currency</InputLabel>
-              <Input
-                id="currency"
-                value={formData.currency || ''}
-                onChange={(e) =>
-                  setFormData({ ...formData, currency: e.target.value })
-                }
-              />
-            </>
-          )}
-          <InputLabel id="by-label">By</InputLabel>
-          <Select
-            labelId="by-label"
-            id="by"
-            value={formData.by || ''}
-            onChange={(e: SelectChangeEvent) =>
-              setFormData({ ...formData, by: e.target.value as Id })
-            }
-            label="by"
-          >
-            {doc?.users.map((u: User) => (
-              <MenuItem key={u.id} value={u.id}>
-                {u.name}
-              </MenuItem>
-            ))}
-          </Select>
-          <InputLabel id="for-label">For</InputLabel>
-          <Select
-            labelId="for-label"
-            id="for"
-            multiple
-            value={formData.for || []}
-            input={<OutlinedInput label="Tag" />}
-            renderValue={(selected: Id[]) =>
-              selected
-                .map((s: Id) => doc?.users.find((u) => u.id === s)?.name)
-                .join(',')
-            }
-            onChange={handleMultiSelectChange}
-            MenuProps={MenuProps}
-          >
-            {doc?.users.map((u: User) => (
-              <MenuItem key={u.id} value={u.id}>
-                <Checkbox
-                  checked={
-                    (formData.for || []).findIndex((mu) => u.id === mu) > -1
+      <Typography variant="h3" sx={{ mb: 2 }}>
+        Add a new Expense
+      </Typography>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+        <Typography sx={{ mb: 2 }} variant="subtitle1" gutterBottom>
+          An Expense is a one-to-many transaction between a paying person and
+          one or more recieving persons.
+        </Typography>
+        <form onSubmit={onSubmit}>
+          <FormLabel>New Expense</FormLabel>
+          <FormGroup>
+            <InputLabel htmlFor="title">Title</InputLabel>
+            <Input
+              id="title"
+              value={formData.title || ''}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
+            />
+            <InputLabel htmlFor="amount">Amount</InputLabel>
+            <Input
+              id="amount"
+              value={formData.amount?.value || ''}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  amount: new A.Float64(Number(e.target.value)),
+                })
+              }
+              startAdornment={
+                <InputAdornment position="start">
+                  {formData.currency || ''}
+                </InputAdornment>
+              }
+              type="number"
+            />
+            {showMore && (
+              <>
+                <InputLabel id="currency-label">Currency</InputLabel>
+                <Input
+                  id="currency"
+                  value={formData.currency || ''}
+                  onChange={(e) =>
+                    setFormData({ ...formData, currency: e.target.value })
                   }
                 />
-                <ListItemText primary={u.name} />
-              </MenuItem>
-            ))}
-          </Select>
-          {showMore && (
-            <>
-              <InputLabel id="date-label">Date</InputLabel>
-              <Input
-                id="date"
-                type="date"
-                value={formData.date?.toISOString().split('T')[0] || ''}
-                onChange={(e) =>
-                  setFormData({ ...formData, date: new Date(e.target.value) })
-                }
-              />
-            </>
-          )}
-          {!showMore && <Button onClick={() => setShowMore(true)}>More</Button>}
-          <Button type="submit">Save</Button>
-        </FormGroup>
-      </form>
+              </>
+            )}
+            <InputLabel id="by-label">By</InputLabel>
+            <Select
+              labelId="by-label"
+              id="by"
+              value={formData.by || ''}
+              onChange={(e: SelectChangeEvent) =>
+                setFormData({ ...formData, by: e.target.value as Id })
+              }
+              label="by"
+            >
+              {doc?.users.map((u: User) => (
+                <MenuItem key={u.id} value={u.id}>
+                  {u.name}
+                </MenuItem>
+              ))}
+            </Select>
+            <InputLabel id="for-label">For</InputLabel>
+            <Select
+              labelId="for-label"
+              id="for"
+              multiple
+              value={formData.for || []}
+              input={<OutlinedInput label="Tag" />}
+              renderValue={(selected: Id[]) =>
+                selected
+                  .map((s: Id) => doc?.users.find((u) => u.id === s)?.name)
+                  .join(',')
+              }
+              onChange={handleMultiSelectChange}
+              MenuProps={MenuProps}
+            >
+              {doc?.users.map((u: User) => (
+                <MenuItem key={u.id} value={u.id}>
+                  <Checkbox
+                    checked={
+                      (formData.for || []).findIndex((mu) => u.id === mu) > -1
+                    }
+                  />
+                  <ListItemText primary={u.name} />
+                </MenuItem>
+              ))}
+            </Select>
+            {showMore && (
+              <>
+                <InputLabel id="date-label">Date</InputLabel>
+                <Input
+                  id="date"
+                  type="date"
+                  value={formData.date?.toISOString().split('T')[0] || ''}
+                  onChange={(e) =>
+                    setFormData({ ...formData, date: new Date(e.target.value) })
+                  }
+                />
+              </>
+            )}
+            {!showMore && (
+              <Button onClick={() => setShowMore(true)}>More</Button>
+            )}
+            <Button type="submit">Save</Button>
+          </FormGroup>
+        </form>
+      </Paper>
       <Snackbar
         open={alert.open}
         autoHideDuration={6000}
