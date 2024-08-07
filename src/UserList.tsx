@@ -17,7 +17,6 @@ import {
   DialogTitle,
   Stack,
   Paper,
-  Transitions,
 } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
