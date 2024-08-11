@@ -9,6 +9,8 @@ import {
 } from '@mui/material'
 import Graph from 'graphology'
 
+import EmptyListInfo from './EmptyListInfo'
+
 interface Row {
   from: string
   to: string
@@ -35,9 +37,17 @@ const Settlement = ({
     }
     rows.push(row)
   })
-  return (
+
+  const noSettlements = (
+    <EmptyListInfo
+      heading="No settlements"
+      info="Add payments or expenses to settle the payments"
+    />
+  )
+
+  const settlements = (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 200 }} aria-label="Settlement Table" size="small">
         <TableHead>
           <TableRow>
             <TableCell>From</TableCell>
@@ -62,6 +72,7 @@ const Settlement = ({
       </Table>
     </TableContainer>
   )
+  return rows.length > 0 ? settlements : noSettlements
 }
 
 export default Settlement
