@@ -47,7 +47,7 @@ const Settlement = ({
 
   const settlements = (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 200 }} aria-label="Settlement Table" size="small">
+      <Table sx={{ minWidth: 200 }} aria-label="Settlement Table">
         <TableHead>
           <TableRow>
             <TableCell>From</TableCell>
