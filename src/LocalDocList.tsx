@@ -34,6 +34,7 @@ import TransactionDoc, { Id } from './transactionDoc'
 import { DocUrlContext } from './context'
 
 import AppBar from './AppBar'
+import EmtpyListInfo from './EmptyListInfo'
 
 const LocalDocsList = () => {
   const repo = useContext(RepoContext)
@@ -128,6 +129,13 @@ const LocalDocsList = () => {
     users: d.doc.users.map((u) => u.name).join(', ') || 'No Users',
   }))
 
+  const noDocs = (
+    <EmtpyListInfo
+      heading="No docs found!"
+      info="Create a new Document by clicking the button below."
+    />
+  )
+
   return (
     <>
       <AppBar position="absolute" open={false}>
@@ -157,31 +165,35 @@ const LocalDocsList = () => {
         </Toolbar>
       </AppBar>
 
-      {listDocs.length > 0 && (
-        <Paper sx={{ padding: '10%' }}>
-          <Typography component="h1" variant="h5">
-            Choose an existing Document
-          </Typography>
-          <List>
-            {listDocs.map((d) => (
-              <ListItem
-                key={d.id}
-                onClick={() => loadDoc(d.id as AutomergeUrl)}
-              >
-                <ListItemAvatar>
-                  <Avatar>
-                    <AssignmentIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={d.name} secondary={d.users} />
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      )}
+      <Paper sx={{ padding: '10% 10% 1%' }}>
+        {listDocs.length > 0 ? (
+          <>
+            <Typography component="h1" variant="h5">
+              Choose an existing Document
+            </Typography>
+            <List>
+              {listDocs.map((d) => (
+                <ListItem
+                  key={d.id}
+                  onClick={() => loadDoc(d.id as AutomergeUrl)}
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <AssignmentIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={d.name} secondary={d.users} />
+                </ListItem>
+              ))}
+            </List>
+          </>
+        ) : (
+          noDocs
+        )}
+      </Paper>
       <Paper
         sx={{
-          padding: '5%',
+          padding: '2% 20em',
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'column',
