@@ -2,13 +2,10 @@ import { useContext } from 'react'
 
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
-import { random } from 'graphology-layout'
-import forceAtlas2 from 'graphology-layout-forceatlas2'
 import { Grid, Typography, Paper } from '@mui/material'
 
 import { DocUrlContext } from './context'
 import TransactionDoc from './transactionDoc'
-import GraphVisualization from './GraphVisualization'
 import Settlement from './Settlement'
 
 import {
@@ -27,27 +24,6 @@ const Overview = () => {
     for (const candidate of findCandidate(graph)) {
       optimizeTransaction(graph, candidate)
     }
-    graph.updateEachNodeAttributes((name, attr) => {
-      const username = doc?.users.find((u) => u.id === name)?.name
-      return {
-        ...attr,
-        size: 15,
-        label: username,
-      }
-    })
-    graph.updateEachEdgeAttributes((_edge, attr) => ({
-      ...attr,
-      label: `${attr.amount}€`,
-      size: 5,
-    }))
-    random.assign(graph, { scale: 200 })
-    forceAtlas2.assign(graph, {
-      iterations: 10,
-      settings: {
-        gravity: 2,
-      },
-    })
-
     cleanUpGraph(graph)
   }
   return (
@@ -62,9 +38,6 @@ const Overview = () => {
               graph={graph}
               defaultCurrency={doc?.settings.defaultCurrency || '€'}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <GraphVisualization graph={graph} />
           </Grid>
         </Grid>
       </Paper>
