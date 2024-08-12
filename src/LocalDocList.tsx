@@ -2,12 +2,13 @@ import { useState, useContext, useEffect } from 'react'
 import {
   Avatar,
   Button,
+  Box,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Paper,
+  Stack,
   TextField,
   Toolbar,
   Typography,
@@ -36,12 +37,16 @@ import { DocUrlContext } from './context'
 import AppBar from './AppBar'
 import EmtpyListInfo from './EmptyListInfo'
 
+import { useAppBarHeight } from './MuiHelper'
+
 const LocalDocsList = () => {
   const repo = useContext(RepoContext)
   const [_, setDocUrl] = useContext(DocUrlContext)
   const [docs, setDocs] = useState<{ id: Id; doc: TransactionDoc }[]>([])
   const [dialogOpen, setDialogOpen] = useState(false)
   const [groupName, setGroupName] = useState<string>('')
+
+  const appBarHeight = useAppBarHeight()
 
   useEffect(() => {
     // FIXME: replace all this error prone code by on `repo.handles` call and map it /o\
@@ -138,7 +143,7 @@ const LocalDocsList = () => {
 
   return (
     <>
-      <AppBar position="absolute" open={false}>
+      <AppBar position="sticky" open={false}>
         <Toolbar
           sx={{
             pr: '24px', // keep right padding when drawer closed
@@ -165,9 +170,17 @@ const LocalDocsList = () => {
         </Toolbar>
       </AppBar>
 
-      <Paper sx={{ padding: '10% 10% 1%' }}>
+      <Stack
+        sx={{
+          minHeight: `calc(100vh - ${appBarHeight}px)`,
+          padding: '5%',
+        }}
+        direction="column"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         {listDocs.length > 0 ? (
-          <>
+          <Box sx={{ width: '100%', padding: '5%' }}>
             <Typography component="h1" variant="h5">
               Choose an existing Document
             </Typography>
@@ -186,19 +199,10 @@ const LocalDocsList = () => {
                 </ListItem>
               ))}
             </List>
-          </>
+          </Box>
         ) : (
           noDocs
         )}
-      </Paper>
-      <Paper
-        sx={{
-          padding: '2% 20em',
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}
-      >
         <Button
           variant="contained"
           color="primary"
@@ -208,7 +212,7 @@ const LocalDocsList = () => {
         >
           Create New Doc
         </Button>
-      </Paper>
+      </Stack>
       <Dialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
