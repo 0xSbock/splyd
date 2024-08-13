@@ -76,28 +76,28 @@ const ExpenseAdd = () => {
       open: true,
       severity: 'error' as Severity,
     }
-    if (!formData.title) {
+    if (formData.title === undefined) {
       setAlert({
         ...alertDefaults,
         message: 'The title of the expense is missing',
       })
       return
     }
-    if (!formData.amount) {
+    if (formData.amount === undefined) {
       setAlert({
         ...alertDefaults,
         message: 'The amount of the expense is missing',
       })
       return
     }
-    if (!formData.by) {
+    if (formData.by === undefined) {
       setAlert({
         ...alertDefaults,
         message: 'Please select who paid the expense',
       })
       return
     }
-    if (!formData.for || formData.for?.length === 0) {
+    if (formData.for === undefined || formData.for?.length === 0) {
       setAlert({
         ...alertDefaults,
         message: 'Please select who the expense was for',
@@ -159,7 +159,7 @@ const ExpenseAdd = () => {
             <InputLabel htmlFor="title">Title</InputLabel>
             <Input
               id="title"
-              value={formData.title || ''}
+              value={formData.title ?? ''}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
               }
@@ -167,7 +167,7 @@ const ExpenseAdd = () => {
             <InputLabel htmlFor="amount">Amount</InputLabel>
             <Input
               id="amount"
-              value={formData.amount?.value || ''}
+              value={formData.amount?.value ?? ''}
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -176,7 +176,7 @@ const ExpenseAdd = () => {
               }
               startAdornment={
                 <InputAdornment position="start">
-                  {formData.currency || ''}
+                  {formData.currency ?? ''}
                 </InputAdornment>
               }
               type="number"
@@ -186,7 +186,7 @@ const ExpenseAdd = () => {
                 <InputLabel id="currency-label">Currency</InputLabel>
                 <Input
                   id="currency"
-                  value={formData.currency || ''}
+                  value={formData.currency ?? ''}
                   onChange={(e) =>
                     setFormData({ ...formData, currency: e.target.value })
                   }
@@ -197,9 +197,9 @@ const ExpenseAdd = () => {
             <Select
               labelId="by-label"
               id="by"
-              value={formData.by || ''}
+              value={formData.by ?? ''}
               onChange={(e: SelectChangeEvent) =>
-                setFormData({ ...formData, by: e.target.value as Id })
+                setFormData({ ...formData, by: e.target.value })
               }
               label="by"
             >
@@ -214,7 +214,7 @@ const ExpenseAdd = () => {
               labelId="for-label"
               id="for"
               multiple
-              value={formData.for || []}
+              value={formData.for ?? []}
               input={<OutlinedInput label="Tag" />}
               renderValue={(selected: Id[]) =>
                 selected
@@ -228,7 +228,7 @@ const ExpenseAdd = () => {
                 <MenuItem key={u.id} value={u.id}>
                   <Checkbox
                     checked={
-                      (formData.for || []).findIndex((mu) => u.id === mu) > -1
+                      (formData.for ?? []).findIndex((mu) => u.id === mu) > -1
                     }
                   />
                   <ListItemText primary={u.name} />
@@ -241,7 +241,7 @@ const ExpenseAdd = () => {
                 <Input
                   id="date"
                   type="date"
-                  value={formData.date?.toISOString().split('T')[0] || ''}
+                  value={formData.date?.toISOString().split('T')[0] ?? ''}
                   onChange={(e) =>
                     setFormData({ ...formData, date: new Date(e.target.value) })
                   }

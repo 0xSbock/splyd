@@ -26,7 +26,7 @@ const PaymentList = () => {
   const [docUrl, _] = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
 
-  const renderList = (doc?.payments.length || 0) > 0
+  const renderList = (doc?.payments.length ?? 0) > 0
 
   const userMap = generateUserMap(doc)
 
@@ -34,7 +34,7 @@ const PaymentList = () => {
     const paymentIndex = doc?.payments.findIndex(
       (exp: Payment) => exp.id === id
     )
-    changeDoc((d) => A.deleteAt(d.payments, paymentIndex as number))
+    changeDoc((d) => A.deleteAt(d.payments, paymentIndex!))
     doc?.payments.forEach((payment, i) => {
       if (payment.from === id || payment.to === id) {
         changeDoc((d) => A.deleteAt(d.payments, i))

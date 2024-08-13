@@ -133,9 +133,9 @@ const PaymentAdd = () => {
             <Select
               labelId="from-label"
               id="from"
-              value={formData.from || ''}
+              value={formData.from ?? ''}
               onChange={(e: SelectChangeEvent) =>
-                setFormData({ ...formData, from: e.target.value as Id })
+                setFormData({ ...formData, from: e.target.value })
               }
               label="from"
             >
@@ -151,9 +151,9 @@ const PaymentAdd = () => {
             <Select
               labelId="to-label"
               id="to"
-              value={formData.to || ''}
+              value={formData.to ?? ''}
               onChange={(e: SelectChangeEvent) =>
-                setFormData({ ...formData, to: e.target.value as Id })
+                setFormData({ ...formData, to: e.target.value })
               }
               label="to"
             >
@@ -168,7 +168,7 @@ const PaymentAdd = () => {
             </InputLabel>
             <Input
               id="amount"
-              value={formData.amount?.value || ''}
+              value={formData.amount?.value ?? ''}
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -200,7 +200,7 @@ const PaymentAdd = () => {
                 <Input
                   id="date"
                   type="date"
-                  value={formData.date?.toISOString().split('T')[0] || ''}
+                  value={formData.date?.toISOString().split('T')[0] ?? ''}
                   onChange={(e) =>
                     setFormData({ ...formData, date: new Date(e.target.value) })
                   }
@@ -212,7 +212,7 @@ const PaymentAdd = () => {
                 <InputLabel id="title-label">Title</InputLabel>
                 <Input
                   id="title"
-                  value={formData.title || ''}
+                  value={formData.title ?? ''}
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }

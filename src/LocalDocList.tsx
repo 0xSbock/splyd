@@ -65,11 +65,7 @@ const LocalDocsList = () => {
     request.onsuccess = (event) => {
       // @ts-expect-error use repo to find all available docs
       const db = event.target.result
-      if (
-        db &&
-        db.objectStoreNames &&
-        db.objectStoreNames.contains('documents')
-      ) {
+      if (db?.objectStoreNames?.contains('documents')) {
         const transaction = db?.transaction(['documents'])
         const objectStore = transaction.objectStore('documents')
         // FIXME:
@@ -129,8 +125,8 @@ const LocalDocsList = () => {
   }
 
   const listDocs = docs.map((d) => ({
-    id: d.id as Id,
-    name: d.doc.name as string,
+    id: d.id,
+    name: d.doc.name,
     users: d.doc.users.map((u) => u.name).join(', ') || 'No Users',
   }))
 

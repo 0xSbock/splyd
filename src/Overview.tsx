@@ -36,7 +36,7 @@ const Overview = () => {
           <Grid item xs={12}>
             <Settlement
               graph={graph}
-              defaultCurrency={doc?.settings.defaultCurrency || '€'}
+              defaultCurrency={doc?.settings.defaultCurrency ?? '€'}
             />
           </Grid>
         </Grid>

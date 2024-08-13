@@ -29,7 +29,7 @@ const ExpenseList = () => {
   const [docUrl, _] = useContext(DocUrlContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
 
-  const renderList = (doc?.expenses.length || 0) > 0
+  const renderList = (doc?.expenses.length ?? 0) > 0
 
   const userMap = generateUserMap(doc)
 
@@ -37,7 +37,7 @@ const ExpenseList = () => {
     const expenseIndex = doc?.expenses.findIndex(
       (exp: Expense) => exp.id === id
     )
-    changeDoc((d) => A.deleteAt(d.expenses, expenseIndex as number))
+    changeDoc((d) => A.deleteAt(d.expenses, expenseIndex!))
   }
 
   const emptyListInfo = (
