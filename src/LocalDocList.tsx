@@ -31,73 +31,37 @@ import {
 } from '@automerge/automerge-repo'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
-import TransactionDoc, { Id } from './transactionDoc'
+import TransactionDoc from './transactionDoc'
 import { DocUrlContext } from './context'
 
 import AppBar from './AppBar'
 import EmtpyListInfo from './EmptyListInfo'
 
 import { useAppBarHeight } from './MuiHelper'
+import { useLocalHandles } from './hooks'
 
 const LocalDocsList = () => {
   const repo = useContext(RepoContext)
   const [_, setDocUrl] = useContext(DocUrlContext)
-  const [docs, setDocs] = useState<{ id: Id; doc: TransactionDoc }[]>([])
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const [groupName, setGroupName] = useState<string>('')
+  const [docs, setDocs] = useState<
+    { id: AnyDocumentId; doc: TransactionDoc }[]
+  >([])
+  const [localHandles, updateLocalStorage] = useLocalHandles()
 
   const appBarHeight = useAppBarHeight()
 
   useEffect(() => {
-    // FIXME: replace all this error prone code by on `repo.handles` call and map it /o\
-    const dbName = 'automerge'
-    // TODO: should we pass a version?
-    const request = indexedDB.open(dbName)
-    request.onerror = (event) => {
-      return (
-        <>
-          <h1>Error: localIndexedDB could not be accessed</h1>
-          <pre>{JSON.stringify(event, null, 2)}</pre>
-        </>
-      )
-    }
+    Promise.all(
+      localHandles.map(async (id) => ({
+        id: id as AnyDocumentId,
+        doc: (await repo?.find(id as AnyDocumentId).doc()) as TransactionDoc,
+      }))
+    ).then((d) => setDocs(d))
+      .catch((reason) => console.log(reason))
+  }, [localHandles, repo])
 
-    request.onsuccess = (event) => {
-      // @ts-expect-error use repo to find all available docs
-      const db = event.target.result
-      if (
-        db &&
-        db.objectStoreNames &&
-        db.objectStoreNames.contains('documents')
-      ) {
-        const transaction = db?.transaction(['documents'])
-        const objectStore = transaction.objectStore('documents')
-        // FIXME:
-        // @ts-expect-error we don't need to type this as this code should be replaced by querying the repo
-        // using the provided api
-        objectStore.getAllKeys().onsuccess = async (event) => {
-          const docs: { id: Id; doc: TransactionDoc }[] = await Promise.all(
-            event.target.result
-              .filter(
-                ([_id, type, _data]: [AnyDocumentId, string, string]) =>
-                  type === 'snapshot'
-              )
-              .map(([id, _type, _data]: [AnyDocumentId, string, string]) => id)
-              .map(
-                async (
-                  id: AnyDocumentId
-                ): Promise<{ id: Id; doc: TransactionDoc }> => ({
-                  id: id as string,
-                  // @ts-expect-error again... just use the repo
-                  doc: await repo.find(id).doc(),
-                })
-              )
-          )
-          setDocs(docs)
-        }
-      }
-    }
-  }, [repo])
   const createNewDoc = () => {
     if (repo) {
       const doc = repo.create<TransactionDoc>()
@@ -112,14 +76,15 @@ const LocalDocsList = () => {
         }
       })
       const docNew = repo?.find(doc.url)
+      updateLocalStorage([...localHandles, doc.url])
       // TODO: setDocUrl could theoretically be unedfined, maybe add some error state for that?
       if (setDocUrl) {
         setDocUrl(docNew.url)
       }
     }
   }
-  const loadDoc = (id: Id) => {
-    const url = `automerge:${id}`
+  const loadDoc = (url: AutomergeUrl) => {
+    const id = url.split(':')[1]
     if (isValidDocumentId(id) && isValidAutomergeUrl(url)) {
       const doc = repo?.find(url)
       if (setDocUrl) {
@@ -128,10 +93,10 @@ const LocalDocsList = () => {
     }
   }
 
-  const listDocs = docs.map((d) => ({
-    id: d.id as Id,
-    name: d.doc.name as string,
-    users: d.doc.users.map((u) => u.name).join(', ') || 'No Users',
+  const listDocs = docs.map(({ id, doc }) => ({
+    id,
+    name: doc?.name,
+    users: doc?.users?.map((u) => u.name).join(', ') ?? 'No Users',
   }))
 
   const noDocs = (
@@ -185,17 +150,17 @@ const LocalDocsList = () => {
               Choose an existing Document
             </Typography>
             <List>
-              {listDocs.map((d) => (
+              {listDocs.map(({ id, name, users }) => (
                 <ListItem
-                  key={d.id}
-                  onClick={() => loadDoc(d.id as AutomergeUrl)}
+                  key={id as string}
+                  onClick={() => loadDoc(id as AutomergeUrl)}
                 >
                   <ListItemAvatar>
                     <Avatar>
                       <AssignmentIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={d.name} secondary={d.users} />
+                  <ListItemText primary={name} secondary={users} />
                 </ListItem>
               ))}
             </List>

@@ -65,7 +65,7 @@ const UserList = () => {
         return
       }
     })
-    changeDoc((d) => A.deleteAt(d.users, userIndex as number))
+    changeDoc((d) => A.deleteAt(d.users, userIndex!))
     setAlert({
       open: true,
       severity: 'success',
@@ -91,7 +91,7 @@ const UserList = () => {
     setAlert({ open: false, severity: 'error', message: '' })
   }
 
-  const renderList = (doc?.users.length || 0) > 0
+  const renderList = (doc?.users.length ?? 0) > 0
   const emptyListInfo = (
     <EmptyListInfo
       heading={'Currently no users in document'}

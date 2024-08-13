@@ -8,7 +8,6 @@ export default defineConfig({
   plugins: [
     wasm(),
     react(),
-    // FIXME: properly set up te pwa
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],

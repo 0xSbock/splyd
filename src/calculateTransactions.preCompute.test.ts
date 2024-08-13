@@ -1,7 +1,6 @@
 import { expect, test } from 'vitest'
 import { next as A } from '@automerge/automerge'
 
-import { Id } from './transactionDoc'
 import { preComputeEdges } from './graphProcessing'
 
 const TestUsers = [0, 1].map((i) => ({
@@ -28,7 +27,7 @@ const TestPayments = [
   },
 ].map((base, i) => ({
   ...base,
-  id: `payment-${i}` as Id,
+  id: `payment-${i}`,
   currency: '€',
   createdAt: new Date(),
 }))

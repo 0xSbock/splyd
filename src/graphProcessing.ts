@@ -1,4 +1,5 @@
 import Graph from 'graphology'
+import Edge, { Attributes } from 'graphology-types'
 import { Id, User, Expense, Payment } from './transactionDoc'
 
 export interface GraphDataBase {
@@ -13,13 +14,9 @@ export interface PreComputedEdge {
   amount: number
 }
 
-export interface TransactionGraph {
-  [key: Id]: {
-    [key: Id]: number
-  }
-}
+export type TransactionGraph = Record<Id, Record<Id, number>>
 
-export type OptimizationCandidate = {
+export interface OptimizationCandidate {
   root: Id
   targets: {
     from: Id
@@ -27,12 +24,13 @@ export type OptimizationCandidate = {
   }
 }
 
-export type computeInOutResult = {
-  [id: Id]: {
+export type computeInOutResult = Record<
+  Id,
+  {
     in: number
     out: number
   }
-}
+>
 
 // TODO: Loads of optimization to be done here!
 // return either a candidate or null if no candidates were found
@@ -75,8 +73,8 @@ export const cleanUpGraph = (graph: Graph | null) => {
   negativeEdges.forEach((edge) => {
     const oldAttrs = graph.getEdgeAttributes(edge)
     const newAmount = oldAttrs.amount * -1
-    const sourceId = graph.getSourceAttribute(edge, 'id')
-    const targetId = graph.getTargetAttribute(edge, 'id')
+    const sourceId = graph.getSourceAttribute(edge, 'id') as Id
+    const targetId = graph.getTargetAttribute(edge, 'id') as Id
     graph.dropEdge(edge)
     // FIXME: currency should be an edge attribute
     graph.addEdge(targetId, sourceId, {
@@ -93,7 +91,7 @@ export function optimizeTransaction(
 ) {
   const { root, targets } = candidate
   const edgeToBeRemoved = g.edge(targets.from, targets.to)
-  const amount: number = g.getEdgeAttribute(edgeToBeRemoved, 'amount')
+  const amount = g.getEdgeAttribute(edgeToBeRemoved, 'amount') as number
   g.updateEdgeAttribute(
     g.edge(root, targets.from),
     'amount',
@@ -155,7 +153,7 @@ export function preComputeEdges({
     })
   })
   // generate all 2-combinations of user ids
-  const userCombinations: Array<Array<Id>> = userIds.flatMap((v, i) =>
+  const userCombinations: Id[][] = userIds.flatMap((v, i) =>
     userIds.slice(i + 1).map((w) => [v, w])
   )
   const res: PreComputedEdge[] = []
@@ -180,15 +178,15 @@ export function preComputeEdges({
 
 export function computeInOut(g: Graph): computeInOutResult {
   const res: computeInOutResult = {}
-  g.forEachNode((node, _attr) => {
+  g.forEachNode((node: string, _attr) => {
     res[node] = {
-      in: g.inEdges
-        // @ts-expect-error TODO: figure out if graph does not provide sufficient typing
-        .map((_e: unknown, attr: unknown) => attr.amount)
+      in: g
+        .inEdges(node)
+        .map((_e: Edge, attr: Attributes) => attr.amount as number)
         .reduce((a: number, b: number) => a + b, 0),
-      out: g.outEdges
-        // @ts-expect-error TODO: figure out if graph does not provide sufficient typing
-        .map((_e: unknown, attr: unknown) => attr.amount)
+      out: g
+        .outEdges(node)
+        .map((_e: Edge, attr: Attributes) => attr.amount as number)
         .reduce((a: number, b: number) => a + b, 0),
     }
   })
@@ -205,7 +203,7 @@ export function generateGraph({
     allowSelfLoops: false,
     type: 'directed',
   })
-  const inOutSum: { [key: string]: { in: number; out: number } } = {}
+  const inOutSum: Record<string, { in: number; out: number }> = {}
   users.forEach((u: User) => {
     graph.addNode(u.id, { ...u })
     inOutSum[u.id] = { in: 0, out: 0 }
@@ -219,7 +217,7 @@ export function generateGraph({
   )
   graph.updateEachNodeAttributes((_name, attr) => ({
     ...attr,
-    ...inOutSum[attr.id],
+    ...inOutSum[attr.id as Id],
   }))
   return graph
 }

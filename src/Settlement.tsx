@@ -30,9 +30,9 @@ const Settlement = ({
   const rows: Row[] = []
   graph.mapEdges((_name, attrs, _source, _target, sourceAttrs, targetAttrs) => {
     const row: Row = {
-      from: sourceAttrs.name,
-      to: targetAttrs.name,
-      amount: attrs.amount,
+      from: sourceAttrs.name as string,
+      to: targetAttrs.name as string,
+      amount: attrs.amount as number,
       currency: defaultCurrency,
     }
     rows.push(row)
