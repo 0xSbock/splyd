@@ -19,15 +19,14 @@ import LocalDocsList from './LocalDocList'
 import FallbackComponent from './FallBackComponent'
 
 function App() {
-  // TODO: remove, this demo shouldn't need to reset the theme.
   const defaultTheme = createTheme({ palette: { mode: 'dark' } })
   const [docUrl, setDocUrl] = useState<undefined | AutomergeUrl>(undefined)
 
   const repo = useMemo(
     () =>
       new Repo({
-        network: [new BroadcastChannelNetworkAdapter()],
         storage: new IndexedDBStorageAdapter(),
+        network: [new BroadcastChannelNetworkAdapter()],
       }),
     []
   )
@@ -39,6 +38,7 @@ function App() {
       setDocUrl(doc.url)
     }
   }, [repo])
+
   useEffect(() => {
     const rootDocUrl = `${document.location.hash.substring(1)}`
     if (docUrl !== undefined && docUrl !== rootDocUrl) {
@@ -48,6 +48,7 @@ function App() {
       document.location.hash = ''
     }
   }, [docUrl])
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <RepoContext.Provider value={repo}>
