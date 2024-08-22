@@ -83,18 +83,18 @@ const Menu = () => {
       },
     },
     {
-      icon: <PersonAddIcon />,
-      name: 'Add a new Person',
-      onClick: () => {
-        setContent(UserAdd), setMobileOpen(false)
-      },
-    },
-    {
       icon: <AddCardIcon />,
       name: 'Add a new Payment',
       onClick: () => {
         setContent(PaymentAdd)
         setMobileOpen(false)
+      },
+    },
+    {
+      icon: <PersonAddIcon />,
+      name: 'Add a new Person',
+      onClick: () => {
+        setContent(UserAdd), setMobileOpen(false)
       },
     },
   ]
