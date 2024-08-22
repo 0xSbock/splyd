@@ -174,7 +174,7 @@ const LocalDocsList = () => {
           variant="contained"
           color="primary"
           onClick={() => setDialogOpen(true)}
-          sx={{ maxWidth: '75%' }}
+          sx={{ maxWidth: { md: '33%' } }}
           fullWidth
         >
           Create New Doc
