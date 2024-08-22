@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, FormEvent } from 'react'
 import { useDocument } from '@automerge/automerge-repo-react-hooks'
 
 import {
@@ -9,6 +9,7 @@ import {
   Paper,
   TextField,
   Typography,
+  FormLabel,
 } from '@mui/material'
 
 import TransactionDoc, { User } from './transactionDoc'
@@ -25,7 +26,8 @@ const UserAdd = () => {
     message: string
   }>({ open: false, severity: 'error', message: '' })
 
-  const handleUsernameSubmit = () => {
+  const handleUsernameSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     // check if user with that name already exists
     if (usernameTaken(doc, username)) {
       setAlert({
@@ -69,27 +71,32 @@ const UserAdd = () => {
           Add users to your document and let them participate in expenses or
           payments.
         </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={8}>
-            <TextField
-              sx={{ width: '100%' }}
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              label="Name"
-              variant="outlined"
-            />
+        <form onSubmit={handleUsernameSubmit}>
+          <FormLabel sx={{ mb: 2 }} component="legend">
+            New User
+          </FormLabel>
+          <Grid container spacing={2}>
+            <Grid item xs={8}>
+              <TextField
+                sx={{ width: '100%' }}
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                label="Name"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                sx={{ height: '100%', width: '100%' }}
+                variant="contained"
+                type="submit"
+              >
+                Add User
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              sx={{ height: '100%', width: '100%' }}
-              variant="contained"
-              onClick={() => handleUsernameSubmit()}
-            >
-              Add User
-            </Button>
-          </Grid>
-        </Grid>
+        </form>
         <Snackbar
           open={alert.open}
           autoHideDuration={6000}
