@@ -1,5 +1,5 @@
 import Graph from 'graphology'
-import Edge, { Attributes } from 'graphology-types'
+import { Attributes } from 'graphology-types'
 import { Id, User, Expense, Payment } from './transactionDoc'
 
 export interface GraphDataBase {
@@ -25,7 +25,7 @@ export interface OptimizationCandidate {
 }
 
 export type computeInOutResult = Record<
-  Id,
+  string,
   {
     in: number
     out: number
@@ -181,12 +181,10 @@ export function computeInOut(g: Graph): computeInOutResult {
   g.forEachNode((node: string, _attr) => {
     res[node] = {
       in: g
-        .inEdges(node)
-        .map((_e: Edge, attr: Attributes) => attr.amount as number)
+        .mapInEdges(node, (_e, attr: Attributes) => attr.amount as number)
         .reduce((a: number, b: number) => a + b, 0),
       out: g
-        .outEdges(node)
-        .map((_e: Edge, attr: Attributes) => attr.amount as number)
+        .mapInEdges(node, (_e, attr: Attributes) => attr.amount as number)
         .reduce((a: number, b: number) => a + b, 0),
     }
   })
