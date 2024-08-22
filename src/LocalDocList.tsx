@@ -58,7 +58,9 @@ const LocalDocsList = () => {
         id: id as AnyDocumentId,
         doc: (await repo?.find(id as AnyDocumentId).doc()) as TransactionDoc,
       }))
-    ).then((d) => setDocs(d))
+    )
+      .then((d) => setDocs(d))
+      // FIXME: better error handling
       .catch((reason) => console.log(reason))
   }, [localHandles, repo])
 
