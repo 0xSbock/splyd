@@ -17,6 +17,7 @@
     "@automerge/automerge": "^2.1.13",
     "@automerge/automerge-repo": "^1.1.4",
     "@automerge/automerge-repo-network-broadcastchannel": "^1.1.4",
+    "@automerge/automerge-repo-network-websocket": "^1.2.1",
     "@automerge/automerge-repo-react-hooks": "^1.1.4",
     "@automerge/automerge-repo-storage-indexeddb": "^1.1.4",
     "@emotion/react": "^11.11.4",

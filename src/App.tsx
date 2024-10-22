@@ -8,6 +8,7 @@ import {
   Repo,
 } from '@automerge/automerge-repo'
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel'
+import { BrowserWebSocketClientAdapter } from "@automerge/automerge-repo-network-websocket"
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
@@ -26,7 +27,7 @@ function App() {
     () =>
       new Repo({
         storage: new IndexedDBStorageAdapter(),
-        network: [new BroadcastChannelNetworkAdapter()],
+        network: [new BroadcastChannelNetworkAdapter(), new BrowserWebSocketClientAdapter("ws://localhost:8000")],
       }),
     []
   )
