@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormGroup,
   Paper,
+  Stack,
   Typography,
 } from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
@@ -33,6 +34,8 @@ interface FormData {
 }
 
 type Severity = 'success' | 'info' | 'warning' | 'error'
+
+const marginBottom = { mb: '20px' }
 
 const PaymentAdd = () => {
   const [docUrl, _] = useContext(DocUrlContext)
@@ -127,63 +130,69 @@ const PaymentAdd = () => {
         <form onSubmit={onSubmit}>
           <FormLabel component="legend">New Payment</FormLabel>
           <FormGroup>
-            <InputLabel id="from-label" required>
-              From
-            </InputLabel>
-            <Select
-              labelId="from-label"
-              id="from"
-              value={formData.from ?? ''}
-              onChange={(e: SelectChangeEvent) =>
-                setFormData({ ...formData, from: e.target.value })
-              }
-              label="from"
-            >
-              {doc?.users.map((u: User) => (
-                <MenuItem key={`from-${u.id}`} value={u.id}>
-                  {u.name}
-                </MenuItem>
-              ))}
-            </Select>
-            <InputLabel id="to-label" required>
-              To
-            </InputLabel>
-            <Select
-              labelId="to-label"
-              id="to"
-              value={formData.to ?? ''}
-              onChange={(e: SelectChangeEvent) =>
-                setFormData({ ...formData, to: e.target.value })
-              }
-              label="to"
-            >
-              {doc?.users.map((u: User) => (
-                <MenuItem key={`to-${u.id}`} value={u.id}>
-                  {u.name}
-                </MenuItem>
-              ))}
-            </Select>
-            <InputLabel htmlFor="amount" required>
-              Amount
-            </InputLabel>
-            <Input
-              id="amount"
-              value={formData.amount?.value ?? ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  amount: new A.Float64(Number(e.target.value)),
-                })
-              }
-              startAdornment={
-                <InputAdornment position="start">
-                  {formData.currency}
-                </InputAdornment>
-              }
-              type="number"
-            />
+            <Stack sx={{ ...marginBottom }}>
+              <InputLabel id="from-label" required>
+                From
+              </InputLabel>
+              <Select
+                labelId="from-label"
+                id="from"
+                value={formData.from ?? ''}
+                onChange={(e: SelectChangeEvent) =>
+                  setFormData({ ...formData, from: e.target.value })
+                }
+                label="from"
+              >
+                {doc?.users.map((u: User) => (
+                  <MenuItem key={`from-${u.id}`} value={u.id}>
+                    {u.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Stack>
+            <Stack sx={{ ...marginBottom }}>
+              <InputLabel id="to-label" required>
+                To
+              </InputLabel>
+              <Select
+                labelId="to-label"
+                id="to"
+                value={formData.to ?? ''}
+                onChange={(e: SelectChangeEvent) =>
+                  setFormData({ ...formData, to: e.target.value })
+                }
+                label="to"
+              >
+                {doc?.users.map((u: User) => (
+                  <MenuItem key={`to-${u.id}`} value={u.id}>
+                    {u.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Stack>
+            <Stack sx={{ ...marginBottom }}>
+              <InputLabel htmlFor="amount" required>
+                Amount
+              </InputLabel>
+              <Input
+                id="amount"
+                value={formData.amount?.value ?? ''}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    amount: new A.Float64(Number(e.target.value)),
+                  })
+                }
+                startAdornment={
+                  <InputAdornment position="start">
+                    {formData.currency}
+                  </InputAdornment>
+                }
+                type="number"
+              />
+            </Stack>
             {showMore && (
-              <>
+              <Stack>
                 <InputLabel id="currency-label">Currency</InputLabel>
                 <Input
                   id="currency"
@@ -192,7 +201,7 @@ const PaymentAdd = () => {
                     setFormData({ ...formData, currency: e.target.value })
                   }
                 />
-              </>
+              </Stack>
             )}
             {showMore && (
               <>
@@ -220,14 +229,18 @@ const PaymentAdd = () => {
               </>
             )}
             {!showMore && (
-              <Button onClick={() => setShowMore(true)}>More</Button>
+              <Stack alignItems='center'>
+                <Button sx={{ ...marginBottom, width: { md: '50%' } }} onClick={() => setShowMore(true)}>More</Button>
+              </Stack>
             )}
-            <Button type="submit">Save</Button>
+            <Stack alignItems='center'>
+              <Button sx={{ ...marginBottom, width: { md: '50%' } }} variant="contained" type="submit">Save</Button>
+            </Stack>
           </FormGroup>
         </form>
         <Snackbar
           open={alert.open}
-          autoHideDuration={6000}
+          autoHideDuration={10000}
           onClose={handleAlertClose}
         >
           <Alert
