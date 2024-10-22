@@ -23,12 +23,17 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 
 import { usernameTaken } from './utils'
-import { DocUrlContext } from './context'
+import { DocUrlContext, ContentContext } from './context'
 import TransactionDoc, { User, Id } from './transactionDoc'
 import EmptyListInfo from './EmptyListInfo'
 
+import { default as UserAddImport } from './UserAdd'
+
+const UserAdd = <UserAddImport />
+
 const UserList = () => {
   const [docUrl, _] = useContext(DocUrlContext)
+  const setContent = useContext(ContentContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
   const [toEdit, setToEdit] = useState<
     { id: Id; username: string | undefined } | undefined
@@ -199,9 +204,18 @@ const UserList = () => {
           <Button type="submit">Save</Button>
         </DialogActions>
       </Dialog>
-      <Typography variant="h3" sx={{ mb: 2 }}>
-        Users
-      </Typography>
+      <Stack justifyContent="space-between" direction="row">
+        <Typography variant="h3" sx={{ mb: 2 }}>
+          Users
+        </Typography>
+        <Button
+          sx={{ mb: '20px' }}
+          variant="outlined"
+          onClick={() => setContent && setContent(UserAdd)}
+        >
+          Add User
+        </Button>
+      </Stack>
 
       <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
         {renderList ? list : emptyListInfo}

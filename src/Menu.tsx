@@ -29,7 +29,7 @@ import {
   AddCard as AddCardIcon,
 } from '@mui/icons-material'
 
-import { DocUrlContext } from './context'
+import { DocUrlContext, ContentContext } from './context'
 import TransactionDoc from './transactionDoc'
 
 import { default as UserListImport } from './UserList'
@@ -55,6 +55,7 @@ const Menu = () => {
   const [isClosing, setIsClosing] = useState(false)
 
   const [content, setContent] = useState(Overview)
+
   const [docUrl, _] = useContext(DocUrlContext)
   const [doc, _changeDoc] = useDocument<TransactionDoc>(docUrl)
 
@@ -228,7 +229,9 @@ const Menu = () => {
               paddingRight: { md: '10%', lg: '15%' },
             }}
           >
-            {content}
+            <ContentContext.Provider value={setContent}>
+              {content}
+            </ContentContext.Provider>
           </Box>
         </Box>
       </Box>
