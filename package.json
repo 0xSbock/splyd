@@ -28,7 +28,8 @@
     "graphology": "^0.25.4",
     "react": "^18.3",
     "react-dom": "^18.3",
-    "react-error-boundary": "^4.0.13"
+    "react-error-boundary": "^4.0.13",
+    "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
     "@types/react": "^18.3",
