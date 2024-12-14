@@ -7,7 +7,3 @@ export const DocUrlContext = createContext<
     Dispatch<SetStateAction<AutomergeUrl | undefined>> | undefined,
   ]
 >([undefined, undefined])
-
-export const ContentContext = createContext<
-  Dispatch<SetStateAction<Element> | Element> | undefined
->(undefined)

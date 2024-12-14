@@ -22,18 +22,15 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 
+import { useNavigate } from 'react-router'
+
 import { usernameTaken } from './utils'
-import { DocUrlContext, ContentContext } from './context'
+import { DocUrlContext } from './context'
 import TransactionDoc, { User, Id } from './transactionDoc'
 import EmptyListInfo from './EmptyListInfo'
 
-import { default as UserAddImport } from './UserAdd'
-
-const UserAdd = <UserAddImport />
-
 const UserList = () => {
   const [docUrl, _] = useContext(DocUrlContext)
-  const setContent = useContext(ContentContext)
   const [doc, changeDoc] = useDocument<TransactionDoc>(docUrl)
   const [toEdit, setToEdit] = useState<
     { id: Id; username: string | undefined } | undefined
@@ -44,6 +41,9 @@ const UserList = () => {
     severity: 'success' | 'info' | 'warning' | 'error'
     message: string
   }>({ open: false, severity: 'error', message: '' })
+
+  const id = (doc.url as string).split(':')[1]
+  const navigate = useNavigate()
 
   const handleDialogClose = () => {
     setOpenDialog(false)
@@ -211,7 +211,7 @@ const UserList = () => {
         <Button
           sx={{ mb: '20px' }}
           variant="outlined"
-          onClick={() => setContent && setContent(UserAdd)}
+          onClick={() => navigate(`${id}/users/add`)}
         >
           Add User
         </Button>

@@ -19,16 +19,13 @@ import {
   IconButton,
 } from '@mui/material'
 
+import { useNavigate } from 'react-router'
+
 import AssignmentIcon from '@mui/icons-material/Assignment'
 import MenuIcon from '@mui/icons-material/Menu'
 
 import { next as A } from '@automerge/automerge'
-import {
-  AnyDocumentId,
-  AutomergeUrl,
-  isValidAutomergeUrl,
-  isValidDocumentId,
-} from '@automerge/automerge-repo'
+import { AnyDocumentId } from '@automerge/automerge-repo'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
 
 import TransactionDoc from './transactionDoc'
@@ -51,6 +48,8 @@ const LocalDocsList = () => {
   const [localHandles, updateLocalStorage] = useLocalHandles()
 
   const appBarHeight = useAppBarHeight()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     Promise.all(
@@ -82,15 +81,6 @@ const LocalDocsList = () => {
       // TODO: setDocUrl could theoretically be unedfined, maybe add some error state for that?
       if (setDocUrl) {
         setDocUrl(docNew.url)
-      }
-    }
-  }
-  const loadDoc = (url: AutomergeUrl) => {
-    const id = url.split(':')[1]
-    if (isValidDocumentId(id) && isValidAutomergeUrl(url)) {
-      const doc = repo?.find(url)
-      if (setDocUrl) {
-        setDocUrl(doc?.url)
       }
     }
   }
@@ -155,7 +145,7 @@ const LocalDocsList = () => {
               {listDocs.map(({ id, name, users }) => (
                 <ListItem
                   key={id as string}
-                  onClick={() => loadDoc(id as AutomergeUrl)}
+                  onClick={() => navigate(`/${(id as string).split(':')[1]}`)}
                 >
                   <ListItemAvatar>
                     <Avatar>

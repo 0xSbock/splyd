@@ -1,6 +1,7 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 
-import { useDocument } from '@automerge/automerge-repo-react-hooks'
+import { isValidAutomergeUrl } from '@automerge/automerge-repo'
+import { useDocument, useRepo } from '@automerge/automerge-repo-react-hooks'
 
 import {
   AppBar,
@@ -28,25 +29,10 @@ import {
   ShoppingBasket as ShoppingBasketIcon,
   AddCard as AddCardIcon,
 } from '@mui/icons-material'
+import { Link, Outlet, useNavigate, useParams } from 'react-router'
 
-import { DocUrlContext, ContentContext } from './context'
+import { DocUrlContext } from './context'
 import TransactionDoc from './transactionDoc'
-
-import { default as UserListImport } from './UserList'
-import { default as UserAddImport } from './UserAdd'
-import { default as ExpenseAddImport } from './ExpenseAdd'
-import { default as ExpenseListImport } from './ExpenseList'
-import { default as PaymentAddImport } from './PaymentAdd'
-import { default as PaymentListImport } from './PaymentList'
-import { default as OverviewImport } from './Overview'
-
-const Overview = <OverviewImport />
-const UserList = <UserListImport />
-const UserAdd = <UserAddImport />
-const ExpenseAdd = <ExpenseAddImport />
-const ExpenseList = <ExpenseListImport />
-const PaymentAdd = <PaymentAddImport />
-const PaymentList = <PaymentListImport />
 
 const drawerWidth = 240
 
@@ -54,10 +40,22 @@ const Menu = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
 
-  const [content, setContent] = useState(Overview)
-
-  const [docUrl, _] = useContext(DocUrlContext)
+  const [docUrl, setDocUrl] = useContext(DocUrlContext)
   const [doc, _changeDoc] = useDocument<TransactionDoc>(docUrl)
+  const repo = useRepo()
+
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const rootDocUrl = `automerge:${id}`
+
+  useEffect(() => {
+    if (isValidAutomergeUrl(rootDocUrl)) {
+      const doc = repo.find(rootDocUrl)
+      setDocUrl(doc?.url)
+    } else {
+      navigate('/')
+    }
+  }, [repo, rootDocUrl])
 
   const handleDrawerClose = () => {
     setIsClosing(true)
@@ -79,7 +77,7 @@ const Menu = () => {
       icon: <ShoppingBasketIcon />,
       name: 'Add a new Expense',
       onClick: () => {
-        setContent(ExpenseAdd)
+        navigate(`/${id}/expenses/add`)
         setMobileOpen(false)
       },
     },
@@ -87,7 +85,7 @@ const Menu = () => {
       icon: <AddCardIcon />,
       name: 'Add a new Payment',
       onClick: () => {
-        setContent(PaymentAdd)
+        navigate(`/${id}/payments/add`)
         setMobileOpen(false)
       },
     },
@@ -95,7 +93,8 @@ const Menu = () => {
       icon: <PersonAddIcon />,
       name: 'Add a new Person',
       onClick: () => {
-        setContent(UserAdd), setMobileOpen(false)
+        navigate(`/${id}/users/add`)
+        setMobileOpen(false)
       },
     },
   ]
@@ -105,7 +104,7 @@ const Menu = () => {
       label: 'Overview',
       icon: <HomeIcon />,
       onClick: () => {
-        setContent(Overview)
+        navigate(`/${id}`)
         setMobileOpen(false)
       },
     },
@@ -113,19 +112,19 @@ const Menu = () => {
       name: 'Users',
       label: 'User List',
       icon: <PeopleIcon />,
-      onClick: () => setContent(UserList),
+      onClick: () => navigate(`/${id}/users`),
     },
     {
       name: 'Expenses',
       label: 'Expense List',
       icon: <ShoppingBasketIcon />,
-      onClick: () => setContent(ExpenseList),
+      onClick: () => navigate(`/${id}/expenses`),
     },
     {
       name: 'Payments',
       label: 'Payment List',
       icon: <PaidIcon />,
-      onClick: () => setContent(PaymentList),
+      onClick: () => navigate(`/${id}/payments`),
     },
   ]
 
@@ -171,9 +170,9 @@ const Menu = () => {
               <MenuIcon />
             </IconButton>
             <Typography component="h1" variant="h6" noWrap>
-              <span onClick={() => setContent(Overview)}>
-                Splyd - {doc?.name}
-              </span>
+              <Link to="/">
+                <span>Splyd - {doc?.name}</span>
+              </Link>
             </Typography>
           </Toolbar>
         </AppBar>
@@ -229,9 +228,7 @@ const Menu = () => {
               paddingRight: { md: '10%', lg: '15%' },
             }}
           >
-            <ContentContext.Provider value={setContent}>
-              {content}
-            </ContentContext.Provider>
+            <Outlet />
           </Box>
         </Box>
       </Box>

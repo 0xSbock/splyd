@@ -1,22 +1,28 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 
-import {
-  AutomergeUrl,
-  isValidAutomergeUrl,
-  Repo,
-} from '@automerge/automerge-repo'
+import { AutomergeUrl, Repo } from '@automerge/automerge-repo'
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel'
-import { BrowserWebSocketClientAdapter } from "@automerge/automerge-repo-network-websocket"
+import { BrowserWebSocketClientAdapter } from '@automerge/automerge-repo-network-websocket'
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb'
 import { RepoContext } from '@automerge/automerge-repo-react-hooks'
+
+import { BrowserRouter, Routes, Route } from 'react-router'
+
+import LocalDocsList from './LocalDocList'
+import Overview from './Overview'
+import Users from './Users'
+import UserAdd from './UserAdd'
+import PaymentList from './PaymentList'
+import PaymentAdd from './PaymentAdd'
+import ExpenseList from './ExpenseList'
+import ExpenseAdd from './ExpenseAdd'
+import Menu from './Menu'
 
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { DocUrlContext } from './context'
-import Menu from './Menu'
-import LocalDocsList from './LocalDocList'
 import FallbackComponent from './FallBackComponent'
 
 function App() {
@@ -27,28 +33,13 @@ function App() {
     () =>
       new Repo({
         storage: new IndexedDBStorageAdapter(),
-        network: [new BroadcastChannelNetworkAdapter(), new BrowserWebSocketClientAdapter("ws://localhost:8000")],
+        network: [
+          new BroadcastChannelNetworkAdapter(),
+          new BrowserWebSocketClientAdapter('ws://localhost:8000'),
+        ],
       }),
     []
   )
-
-  useEffect(() => {
-    const rootDocUrl = `${document.location.hash.substring(1)}`
-    if (isValidAutomergeUrl(rootDocUrl)) {
-      const doc = repo.find(rootDocUrl)
-      setDocUrl(doc.url)
-    }
-  }, [repo])
-
-  useEffect(() => {
-    const rootDocUrl = `${document.location.hash.substring(1)}`
-    if (docUrl !== undefined && docUrl !== rootDocUrl) {
-      document.location.hash = docUrl as string
-    }
-    if (rootDocUrl === undefined) {
-      document.location.hash = ''
-    }
-  }, [docUrl])
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -56,7 +47,28 @@ function App() {
         <DocUrlContext.Provider value={[docUrl, setDocUrl]}>
           <CssBaseline />
           <ErrorBoundary FallbackComponent={FallbackComponent}>
-            {docUrl === undefined ? <LocalDocsList /> : <Menu />}
+            <BrowserRouter>
+              <Routes>
+                <Route index element={<LocalDocsList />} />
+                <Route element={<Menu />}>
+                  <Route path=":id">
+                    <Route index element={<Overview />} />
+                    <Route path="users">
+                      <Route index element={<Users />} />
+                      <Route path="add" element={<UserAdd />} />
+                    </Route>
+                    <Route path="payments">
+                      <Route index element={<PaymentList />} />
+                      <Route path="add" element={<PaymentAdd />} />
+                    </Route>
+                    <Route path="expenses">
+                      <Route index element={<ExpenseList />} />
+                      <Route path="add" element={<ExpenseAdd />} />
+                    </Route>
+                  </Route>
+                </Route>
+              </Routes>
+            </BrowserRouter>
           </ErrorBoundary>
         </DocUrlContext.Provider>
       </RepoContext.Provider>
