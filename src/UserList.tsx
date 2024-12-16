@@ -42,7 +42,7 @@ const UserList = () => {
     message: string
   }>({ open: false, severity: 'error', message: '' })
 
-  const id = (doc.url as string).split(':')[1]
+  const docId = (docUrl || '').split(':')[1]
   const navigate = useNavigate()
 
   const handleDialogClose = () => {
@@ -211,7 +211,7 @@ const UserList = () => {
         <Button
           sx={{ mb: '20px' }}
           variant="outlined"
-          onClick={() => navigate(`${id}/users/add`)}
+          onClick={() => navigate(`/${docId}/users/add`)}
         >
           Add User
         </Button>

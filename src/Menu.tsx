@@ -51,7 +51,9 @@ const Menu = () => {
   useEffect(() => {
     if (isValidAutomergeUrl(rootDocUrl)) {
       const doc = repo.find(rootDocUrl)
-      setDocUrl(doc?.url)
+      if (setDocUrl) {
+        setDocUrl(doc?.url)
+      }
     } else {
       navigate('/')
     }
