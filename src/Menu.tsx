@@ -29,7 +29,7 @@ import {
   ShoppingBasket as ShoppingBasketIcon,
   AddCard as AddCardIcon,
 } from '@mui/icons-material'
-import { Link, Outlet, useNavigate, useParams } from 'react-router'
+import { Outlet, useNavigate, useParams } from 'react-router'
 
 import { DocUrlContext } from './context'
 import TransactionDoc from './transactionDoc'
@@ -172,9 +172,7 @@ const Menu = () => {
               <MenuIcon />
             </IconButton>
             <Typography component="h1" variant="h6" noWrap>
-              <Link to="/">
-                <span>Splyd - {doc?.name}</span>
-              </Link>
+              <span>Splyd - {doc?.name}</span>
             </Typography>
           </Toolbar>
         </AppBar>
