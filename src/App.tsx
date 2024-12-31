@@ -35,7 +35,11 @@ function App() {
         storage: new IndexedDBStorageAdapter(),
         network: [
           new BroadcastChannelNetworkAdapter(),
-          new BrowserWebSocketClientAdapter('ws://localhost:8000'),
+          new BrowserWebSocketClientAdapter(
+            import.meta.env.PROD
+              ? `wss://${window.location.host}/ws/`
+              : 'ws://localhost:3030'
+          ),
         ],
       }),
     []
